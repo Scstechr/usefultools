@@ -77,9 +77,9 @@ def setCommitBranch(branch):
                     print(f'> You have clean state. Checking out to branch `{branch}`')
                     EXECUTE(f'git checkout {branch} >> .git_checkout_log')
                 else:
-                    print('It seems you have some files to commit.')
+                    print('\nIt seems you have some files to commit.')
                     if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
-                        print(f'>> Commiting branch is now set to `{current_branch}`')
+                        print(f'\nCommiting branch is now set to `{current_branch}`')
                         branch = current_branch
                     else:
                         EXECUTE('git stash')
@@ -107,12 +107,13 @@ def setCommitBranch(branch):
 @click.command()
 @click.option('--folder', default='.', type=click.Path(exists=True), help='Path of .git folder. Default: "."')
 @click.option('--path', default='.', type=click.Path(exists=True), help='Path of staing file(s). Default: "."')
+@click.option('--tag', default='NONE', help='What kind of commit. Default: "File Name"')
 @click.option('--branch', default='master', type=str, help='Commiting branch. Default: "master"')
 @click.option('--fetch', is_flag=True, help='Fetch or not')
 @click.option('--push', is_flag=True, help='Push or not')
 @click.option('--commit', is_flag=True, help='Commit or not')
 @click.option('--rebase', is_flag=True, help='Rebase or not')
-def Commit(folder, path, branch, fetch, push, commit, rebase):
+def Commit(folder, path, branch, fetch, push, commit, rebase, tag):
     git_folder = os.path.abspath(folder)
     commit_file = os.path.abspath(path)
     os.chdir(git_folder)
@@ -124,12 +125,16 @@ def Commit(folder, path, branch, fetch, push, commit, rebase):
     if commit:
         EXECUTE(f'git reset')
         commit_branch = setCommitBranch(branch)
-        modified_list = getModifiedList()
-        if len(modified_list) > 0:
+        if len(getModifiedList()) > 0:
+            print('\n')
             EXECUTE(f'git add {commit_file}')
             EXECUTE(f'git status')
             print('Commit Message:', end=" ")
-            commit_message = f'{pathlib.PurePath(commit_file).stem}: {input()}'
+            if tag == 'NONE':
+                tag = pathlib.PurePath(commit_file).stem
+            else:
+                tag = f'[{tag}]'
+            commit_message = f'{tag}: {input()}'
             EXECUTE(f'git commit -m "{commit_message}"')
         else:
             print('Nothing to commit. Clean. ')
