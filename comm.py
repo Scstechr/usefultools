@@ -58,12 +58,19 @@ def setCommitBranch(branch):
 @click.option('--git_folder', default='.', type=click.Path(exists=True), help='Path of .git folder')
 @click.option('--commit_file', default='.', type=click.Path(exists=True), help='Path of staing file(s)')
 @click.option('--branch', default='master', type=str, help='Commiting branch. Default set to master')
+@click.option('--fetch', is_flag=True)
 @click.option('--p', is_flag=True)
-def Commit(git_folder, commit_file, branch, p):
+def Commit(git_folder, commit_file, branch, fetch, p):
     git_folder = os.path.abspath(git_folder)
     commit_file = os.path.abspath(commit_file)
     os.chdir(git_folder)
+    if fetch:
+        EXECUTE(f'git fetch')
     commit_branch = setCommitBranch(branch)
+    EXECUTE(f'git status')
+    EXECUTE(f'git add {commit_file}')
+    EXECUTE(f'git commit -a')
+
 
 def main():
     Commit()
