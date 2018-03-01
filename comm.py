@@ -50,7 +50,7 @@ def setCommitBranch(branch):
                 EXECUTE(f'git add .')
                 EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
                 EXECUTE(f'git checkout {branch}')
-                EXECUTE(f'git merge --no-ff {current_branch}')
+                EXECUTE(f'git merge {current_branch}')
                 EXECUTE(f'git checkout {current_branch}')
     return branch
 
