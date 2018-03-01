@@ -61,7 +61,7 @@ def setCommitBranch(branch):
             if not click.confirm(f'Do you want to merge `{current_branch}` into `{branch}`?'):
                 if checkClean():
                     print(f'> You have clean state. Checking out to branch `{branch}`')
-                    EXECUTE(f'git checkout {branch}')
+                    EXECUTE(f'git checkout {branch} >> .git_checkout_log')
                 else:
                     print('It seems you have some files to commit.')
                     if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
@@ -90,7 +90,7 @@ def setCommitBranch(branch):
                 EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
                 EXECUTE(f'git checkout {branch} >> .git_checkout_log')
                 EXECUTE(f'git merge {current_branch} --no-commit')
-                ABORT()
+                sys.exit()
     return branch
 
 @click.command()

@@ -1,0 +1,143 @@
+From f5a43cee774364a3e20c39b37011d3b7e1fbc0a0 Mon Sep 17 00:00:00 2001
+From: Scstechr <teufelkonig@gmail.com>
+Date: Fri, 2 Mar 2018 04:05:12 +0900
+Subject: [PATCH 1/2] useful: changes made
+
+---
+ comm.py | 35 ++++++++++++++++++++++-------------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
+
+diff --git a/comm.py b/comm.py
+index 8d2e6d1..ccc6387 100644
+--- a/comm.py
++++ b/comm.py
+@@ -33,7 +33,6 @@ def getModifiedList():
+ def checkClean():
+     status_list = sp.getoutput(f'git status').replace(' ','').split('\n')
+     if len(status_list)==4:
+-        EXECUTE('git status')
+         return True
+     else:
+         return False
+@@ -58,29 +57,40 @@ def setCommitBranch(branch):
+             else:
+                 EXECUTE(f'git checkout -b {branch}')
+         else:
+-            print(f'Currently on branch `{current_branch}` but commiting branch is `{branch}`.\n')
++            print(f'Currently on branch `{current_branch}` but commiting branch is set to `{branch}`.\n')
+             if not click.confirm(f'Do you want to merge `{current_branch}` into `{branch}`?'):
+                 if checkClean():
++                    print(f'> You have clean state. Checking out to branch `{branch}`')
++                    EXECUTE(f'git checkout {branch}')
++                else:
++                    print('It seems you have some files to commit.')
++                    if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
++                        print(f'>> Commiting branch is now set to `{current_branch}`')
++                        branch = current_branch
++                    else:
++                        EXECUTE('git stash')
++                        EXECUTE(f'git checkout {branch}')
++                        
++            else:
++                if checkClean():
+                     print(f'You have clean state. Checking out to branch `{branch}`')
+                     EXECUTE(f'git checkout {branch}')
+                 else:
+                     print('These are the modified list:')
+                     [print(filename) for filename in getModifiedList()]
+                     if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
+-                        print(f'Staying on branch `{current_branch}`')
++                        print(f'> Staying on branch `{current_branch}`')
+                         branch = current_branch
+                     else:
+                         EXECUTE('git stash')
+                         EXECUTE(f'git checkout {branch}')
+-                        
+-            else:
+-                print(f'Merge {current_branch} into {branch}\n')
++                EXECUTE(f'git format-patch master --stdout >| test.patch')
++                print(f'> Merge {current_branch} into {branch}\n')
+                 EXECUTE(f'git add .')
+                 EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
+-                EXECUTE(f'git checkout {branch}')
+-                EXECUTE(f'git merge {current_branch}')
+-                EXECUTE(f'git checkout {current_branch}')
+-                click.end()
++                EXECUTE(f'git checkout {branch} >> .git_checkout_log')
++                EXECUTE(f'git merge {current_branch} --no-commit')
++                ABORT()
+     return branch
+ 
+ @click.command()
+@@ -104,12 +114,11 @@ def Commit(git_folder, commit_file, branch, fetch, push, commit, rebase):
+         commit_branch = setCommitBranch(branch)
+         modified_list = getModifiedList()
+         if len(modified_list) > 0:
+-            print('These are modified since last commit:')
+-            [print(filename) for filename in modified_list]
++            EXECUTE(f'git status')
+             EXECUTE(f'git add {commit_file}')
+             print('Commit Message:', end=" ")
+             commit_message = f'{pathlib.PurePath(commit_file).stem}: {input()}'
+-            EXECUTE(f'git commit -m {commit_message}')
++            EXECUTE(f'git commit -m "{commit_message}"')
+         else:
+             print('Nothing to commit. Clean. ')
+ 
+-- 
+2.13.6 (Apple Git-96)
+
+
+From d1ed056199f9123404b31ece938e95d7ab5317c3 Mon Sep 17 00:00:00 2001
+From: Scstechr <teufelkonig@gmail.com>
+Date: Fri, 2 Mar 2018 04:10:57 +0900
+Subject: [PATCH 2/2] comm: changes made
+
+---
+ comm.py | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/comm.py b/comm.py
+index ccc6387..70a8cec 100644
+--- a/comm.py
++++ b/comm.py
+@@ -94,16 +94,16 @@ def setCommitBranch(branch):
+     return branch
+ 
+ @click.command()
+-@click.option('--git_folder', default='.', type=click.Path(exists=True), help='Path of .git folder')
+-@click.option('--commit_file', default='.', type=click.Path(exists=True), help='Path of staing file(s)')
+-@click.option('--branch', default='master', type=str, help='Commiting branch. Default set to master')
+-@click.option('--fetch', is_flag=True)
+-@click.option('--push', is_flag=True)
+-@click.option('--commit', is_flag=True)
+-@click.option('--rebase', is_flag=True)
+-def Commit(git_folder, commit_file, branch, fetch, push, commit, rebase):
+-    git_folder = os.path.abspath(git_folder)
+-    commit_file = os.path.abspath(commit_file)
++@click.option('--folder', default='.', type=click.Path(exists=True), help='Path of .git folder. Default: "."')
++@click.option('--path', default='.', type=click.Path(exists=True), help='Path of staing file(s). Default: "."')
++@click.option('--branch', default='master', type=str, help='Commiting branch. Default: "master"')
++@click.option('--fetch', is_flag=True, help='Fetch or not')
++@click.option('--push', is_flag=True, help='Push or not')
++@click.option('--commit', is_flag=True, help='Commit or not')
++@click.option('--rebase', is_flag=True, help='Rebase or not')
++def Commit(folder, path, branch, fetch, push, commit, rebase):
++    git_folder = os.path.abspath(folder)
++    commit_file = os.path.abspath(path)
+     os.chdir(git_folder)
+ 
+     if fetch:
+@@ -114,8 +114,8 @@ def Commit(git_folder, commit_file, branch, fetch, push, commit, rebase):
+         commit_branch = setCommitBranch(branch)
+         modified_list = getModifiedList()
+         if len(modified_list) > 0:
+-            EXECUTE(f'git status')
+             EXECUTE(f'git add {commit_file}')
++            EXECUTE(f'git status')
+             print('Commit Message:', end=" ")
+             commit_message = f'{pathlib.PurePath(commit_file).stem}: {input()}'
+             EXECUTE(f'git commit -m "{commit_message}"')
+-- 
+2.13.6 (Apple Git-96)
+
