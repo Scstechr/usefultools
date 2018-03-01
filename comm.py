@@ -27,21 +27,16 @@ class issue:
     BRANCH = f'\n{bcolors.WARNING}>> BRANCH ISSUE!{bcolors.ENDC}'
     ABORT = f'\n{bcolors.FAIL}>> ABORT! <<{bcolors.ENDC}'
 
-def ABORT():
-    ABORT_MESSAGE = '\n>> ABORT COMMIT <<'
-    print(ABORT_MESSAGE)
-    click.Abort()
-
 def EXECUTE(command):
     print(f'{bcolors.OKBLUE}>> EXECUTE: {command}{bcolors.ENDC}')
     os.system(command)
     
 def getModifiedList():
     status_list = sp.getoutput(f'git status').replace(' ','').split('\n')
-    
     modified_list = set(filename for filename in status_list if filename.find('modified') > 0)
     new_file_list = set(filename for filename in status_list if filename.find('new file') > 0)
     delete_file_list = set(filename for filename in status_list if filename.find('delete file') > 0)
+    modified_list = modified_list.union(new_file_list, delete_file_list)
     return modified_list
 
 def checkClean():
