@@ -33,6 +33,7 @@ def getModifiedList():
 def checkClean():
     status_list = sp.getoutput(f'git status').replace(' ','').split('\n')
     if len(status_list)==4:
+        EXECUTE('git status')
         return True
     else:
         return False
@@ -57,15 +58,21 @@ def setCommitBranch(branch):
             else:
                 EXECUTE(f'git checkout -b {branch}')
         else:
-            print(f'Currently on branch `{current_branch}` but commiting branch is `{branch}`.')
+            print(f'Currently on branch `{current_branch}` but commiting branch is `{branch}`.\n')
             if not click.confirm(f'Do you want to merge `{current_branch}` into `{branch}`?'):
-                print('Just checking out...')
-                if checkClean:
-                    print('CLEAN STATE')
+                if checkClean():
+                    print(f'You have clean state. Checking out to branch `{branch}`')
+                    EXECUTE(f'git checkout {branch}')
                 else:
-                    print('DIRTY!!!')
-                    modified_list = getModifiedList()
-                #EXECUTE(f'git checkout {branch}')
+                    print('These are the modified list:')
+                    [print(filename) for filename in getModifiedList()]
+                    if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
+                        print(f'Staying on branch `{current_branch}`')
+                        branch = current_branch
+                    else:
+                        EXECUTE('git stash')
+                        EXECUTE(f'git checkout {branch}')
+                        
             else:
                 print(f'Merge {current_branch} into {branch}\n')
                 EXECUTE(f'git add .')
@@ -73,6 +80,7 @@ def setCommitBranch(branch):
                 EXECUTE(f'git checkout {branch}')
                 EXECUTE(f'git merge {current_branch}')
                 EXECUTE(f'git checkout {current_branch}')
+                click.end()
     return branch
 
 @click.command()
@@ -93,7 +101,6 @@ def Commit(git_folder, commit_file, branch, fetch, push, commit, rebase):
     if rebase:
         EXECUTE(f'git rebase')
     if commit:
-
         commit_branch = setCommitBranch(branch)
         modified_list = getModifiedList()
         if len(modified_list) > 0:
