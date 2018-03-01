@@ -94,16 +94,16 @@ def setCommitBranch(branch):
     return branch
 
 @click.command()
-@click.option('--git_folder', default='.', type=click.Path(exists=True), help='Path of .git folder')
-@click.option('--commit_file', default='.', type=click.Path(exists=True), help='Path of staing file(s)')
-@click.option('--branch', default='master', type=str, help='Commiting branch. Default set to master')
-@click.option('--fetch', is_flag=True)
-@click.option('--push', is_flag=True)
-@click.option('--commit', is_flag=True)
-@click.option('--rebase', is_flag=True)
-def Commit(git_folder, commit_file, branch, fetch, push, commit, rebase):
-    git_folder = os.path.abspath(git_folder)
-    commit_file = os.path.abspath(commit_file)
+@click.option('--folder', default='.', type=click.Path(exists=True), help='Path of .git folder. Default: "."')
+@click.option('--path', default='.', type=click.Path(exists=True), help='Path of staing file(s). Default: "."')
+@click.option('--branch', default='master', type=str, help='Commiting branch. Default: "master"')
+@click.option('--fetch', is_flag=True, help='Fetch or not')
+@click.option('--push', is_flag=True, help='Push or not')
+@click.option('--commit', is_flag=True, help='Commit or not')
+@click.option('--rebase', is_flag=True, help='Rebase or not')
+def Commit(folder, path, branch, fetch, push, commit, rebase):
+    git_folder = os.path.abspath(folder)
+    commit_file = os.path.abspath(path)
     os.chdir(git_folder)
 
     if fetch:
@@ -114,8 +114,8 @@ def Commit(git_folder, commit_file, branch, fetch, push, commit, rebase):
         commit_branch = setCommitBranch(branch)
         modified_list = getModifiedList()
         if len(modified_list) > 0:
-            EXECUTE(f'git status')
             EXECUTE(f'git add {commit_file}')
+            EXECUTE(f'git status')
             print('Commit Message:', end=" ")
             commit_message = f'{pathlib.PurePath(commit_file).stem}: {input()}'
             EXECUTE(f'git commit -m "{commit_message}"')
