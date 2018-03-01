@@ -24,9 +24,18 @@ def EXECUTE(command):
     
 def getModifiedList():
     status_list = sp.getoutput(f'git status').replace(' ','').split('\n')
-    modified_list = set(filename[filename.find(":")+1:] for filename in status_list if filename.find('modified') > 0)
-    new_file_list = set(filename[filename.find(":")+1:] for filename in status_list if filename.find('new') > 0)
+    
+    modified_list = set(filename for filename in status_list if filename.find('modified') > 0)
+    new_file_list = set(filename for filename in status_list if filename.find('new file') > 0)
+    delete_file_list = set(filename for filename in status_list if filename.find('delete file') > 0)
     return modified_list
+
+def checkClean():
+    status_list = sp.getoutput(f'git status').replace(' ','').split('\n')
+    if len(status_list)==4:
+        return True
+    else:
+        return False
 
 def getCurrentBranch():
     ''' Returns current branch name '''
@@ -51,8 +60,12 @@ def setCommitBranch(branch):
             print(f'Currently on branch `{current_branch}` but commiting branch is `{branch}`.')
             if not click.confirm(f'Do you want to merge `{current_branch}` into `{branch}`?'):
                 print('Just checking out...')
-                modified_list = getModifiedList()
-                EXECUTE(f'git checkout {branch}')
+                if checkClean:
+                    print('CLEAN STATE')
+                else:
+                    print('DIRTY!!!')
+                    modified_list = getModifiedList()
+                #EXECUTE(f'git checkout {branch}')
             else:
                 print(f'Merge {current_branch} into {branch}\n')
                 EXECUTE(f'git add .')
