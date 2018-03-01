@@ -36,7 +36,7 @@ def getModifiedList():
     modified_list = set(filename for filename in status_list if filename.find('modified') > 0)
     new_file_list = set(filename for filename in status_list if filename.find('new file') > 0)
     delete_file_list = set(filename for filename in status_list if filename.find('delete file') > 0)
-    modified_list = modified_list.union(new_file_list, delete_file_list)
+    modified_list = modified_list.union(new_file_list, delete_file_list)#
     return modified_list
 
 def checkClean():
