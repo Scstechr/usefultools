@@ -86,23 +86,21 @@ def setCommitBranch(branch):
                         EXECUTE(f'git checkout {branch}')
                         
             else:
-                if checkClean():
-                    print(f'You have clean state. Checking out to branch `{branch}`')
-                    EXECUTE(f'git checkout {branch}')
-                else:
+                if not checkClean():
                     EXECUTE(f'git status')
                     if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
-                        print(f'> Staying on branch `{current_branch}`')
-                        branch = current_branch
+                        EXECUTE('git checkout --force {branch}') 
                     else:
                         EXECUTE('git stash')
                         EXECUTE(f'git checkout {branch}')
-                EXECUTE(f'git format-patch master --stdout >| test.patch')
+                #EXECUTE(f'git format-patch master --stdout >| test.patch')
                 print(f'> Merge {current_branch} into {branch}\n')
                 EXECUTE(f'git add .')
                 EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
                 EXECUTE(f'git checkout {branch} >> .git_checkout_log')
-                EXECUTE(f'git merge {current_branch} --no-commit')
+                EXECUTE(f'git merge --no-ff {current_branch} --no-commit')
+                if  click.confirm(f'CHECKOUT TO BRANCH `{current_branch}`?'):
+                    EXECUTE(f'git checkout {current_branch}')
                 sys.exit()
     return branch
 
