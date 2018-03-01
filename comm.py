@@ -19,8 +19,8 @@ def ABORT():
     click.Abort()
 
 def EXECUTE(command):
-    print('> EXECUTE:', command)
-    #os.system(command)
+    print('>> EXECUTE:', command)
+    os.system(command)
 
 def getCurrentBranch():
     ''' Returns current branch name '''
@@ -46,6 +46,7 @@ def setCommitBranch(branch):
             if not click.confirm(f'Do you want to merge `{current_branch}` into `{branch}`?'):
                 ABORT()
             else:
+                print('\n')
                 EXECUTE(f'git add .')
                 EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
                 EXECUTE(f'git checkout -b {branch}')
