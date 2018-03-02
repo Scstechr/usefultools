@@ -3,7 +3,7 @@
 # from standard library
 import os, sys, subprocess as sp
 # from outside and own library
-import click, bcolor as bc
+import click, bcolors as bc
 
 class issues:
     def BRANCH():
