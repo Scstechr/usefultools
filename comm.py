@@ -92,7 +92,7 @@ def setCommitBranch(branch):
                 #EXECUTE(f'git format-patch master --stdout >| test.patch')
                 print(f'Merge {current_branch} into {branch}\n')
                 EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
-                EXECUTE(f'git checkout {branch} >> .git_checkout_log')
+                EXECUTE(f'git checkout {branch}')
                 EXECUTE(f'git merge --no-ff {current_branch} --no-commit')
                 if  click.confirm(f'CHECKOUT TO BRANCH `{current_branch}`?'):
                     EXECUTE(f'git checkout {current_branch}')
