@@ -25,10 +25,13 @@ def getCurrentBranch():
     branch_list = [branch[2:] for branch in l]
     return current_branch, branch_list
 
-def cmd():
+@click.command()
+@click.option('--gitpath', default='.', type=click.Path(exists=True), help='Path of .git folder. Default: "."')
+@click.option('--filepath', default='.', type=click.Path(exists=True), help='Path of staing file(s). Default: "."')
+@click.option('--branch', default='master', type=str, help='Commiting branch. Default: "master"')
+def cmd(gitpath, filepath, branch):
     issues.BRANCH()
     current_branch, branch_list = getCurrentBranch()
-    print(current_branch)
     pass
 
 def main():
