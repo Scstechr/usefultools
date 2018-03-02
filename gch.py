@@ -1,12 +1,9 @@
 # Git Commit Handler
 
 # from standard library
-import os, sys
-import subprocess as sp
-
+import os, sys, subprocess as sp
 # from outside and own library
-import click
-import bcolors as bc
+import click, bcolor as bc
 
 class issues:
     def BRANCH():
