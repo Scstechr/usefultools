@@ -26,6 +26,7 @@ class bcolors:
 class issue:
     BRANCH = f'\n{bcolors.WARNING}>> BRANCH ISSUE!{bcolors.ENDC}'
     ABORT = f'\n{bcolors.FAIL}>> ABORT!{bcolors.ENDC}'
+    WARNING = f'\n{bcolors.WARNING}>> WARNING!{bcolors.ENDC}'
 
 def EXECUTE(command):
     print(f'{bcolors.OKBLUE}>> EXECUTE: {command}{bcolors.ENDC}')
@@ -61,42 +62,75 @@ def setCommitBranch(branch):
         if branch not in branch_list:
             print(f'You selected branch `{branch}` but it does not exist.\nExisting branch list:')
             [print(f'{idx+1}:', branch) for idx, branch in enumerate(branch_list)]
-            if not click.confirm(f'Do you want to make branch `{branch}`?'):
+            if not click.confirm(f'Do you want to make new branch `{branch}`?'):
                 print(f'{issue.ABORT}')
                 sys.exit(0)
             else:
                 EXECUTE(f'git checkout -b {branch}')
         else:
             print(f'Currently on branch `{current_branch}` but commiting branch is set to `{branch}`.\n')
-            if not click.confirm(f'Do you want to merge `{current_branch}` into `{branch}`?'):
-                if checkClean():
-                    print(f'> You have clean state. Checking out to branch `{branch}`')
-                    EXECUTE(f'git checkout {branch} >> .git_checkout_log')
-                else:
-                    print('\nIt seems you have some files to commit.')
-                    if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
-                        print(f'\nCommiting branch is now set to `{current_branch}`')
-                        branch = current_branch
-                    else:
-                        EXECUTE('git stash')
+            if checkClean():
+                print(f'It seems branch `{current_branch}` has a clean state.')
+                print(f'\t1. Checkout to branch `{branch}\n\t2. Stay on current branch `{current_branch}`')
+                while(1):
+                    print('Please choose your option:', end=" ")
+                    option = f'{input()}'
+                    if option == '1':
                         EXECUTE(f'git checkout {branch}')
-                        
+                        break;
+                    elif option == '2':
+                        print(f'Branch unchanged')
+                        break;
+                    else:
+                        print(f'{issue.WARNING}')
+                        print(f'Please choose 1 or 2')
             else:
-                if not checkClean():
-                    EXECUTE(f'git status')
-                    if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
-                        EXECUTE(f'git checkout --force {branch}') 
-                    else:
-                        EXECUTE('git stash')
+                print(f'It seems branch `{current_branch}` has a some modified/new/deleted files.')
+                print(f'\t1. Discard changes and force checkout to branch `{branch}')
+                print(f'\t2. Stash changes and checkout to branch `{branch}`')
+                print(f'\t3. Try merging `{current_branch}` into `{branch}`')
+                print(f'\t4. Stay on current branch `{current_branch}`')
+                while(1):
+                    print('Please choose your option:', end=" ")
+                    option = f'{input()}'
+                    if option == '1':
                         EXECUTE(f'git checkout {branch}')
-                #EXECUTE(f'git format-patch master --stdout >| test.patch')
-                print(f'Merge {current_branch} into {branch}\n')
-                EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
-                EXECUTE(f'git checkout {branch}')
-                EXECUTE(f'git merge --no-ff {current_branch} --no-commit')
-                if  click.confirm(f'CHECKOUT TO BRANCH `{current_branch}`?'):
-                    EXECUTE(f'git checkout {current_branch}')
-                sys.exit()
+                        break;
+                    elif option == '2':
+                        print(f'Branch unchanged')
+                        break;
+                    else:
+                        print(f'{issue.WARNING}')
+                        print(f'Please choose 1 or 2')
+            #if not click.confirm(f'Do you want to merge `{current_branch}` into `{branch}`?'):
+            #    if checkClean():
+            #        print(f'> You have clean state. Checking out to branch `{branch}`')
+            #        EXECUTE(f'git checkout {branch} >> .git_checkout_log')
+            #    else:
+            #        print('\nIt seems you have some files to commit.')
+            #        if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
+            #            print(f'\nCommiting branch is now set to `{current_branch}`')
+            #            branch = current_branch
+            #        else:
+            #            EXECUTE('git stash')
+            #            EXECUTE(f'git checkout {branch}')
+            #            
+            #else:
+            #    if not checkClean():
+            #        EXECUTE(f'git status')
+            #        if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
+            #            EXECUTE(f'git checkout --force {branch}') 
+            #        else:
+            #            EXECUTE('git stash')
+            #            EXECUTE(f'git checkout {branch}')
+            #    #EXECUTE(f'git format-patch master --stdout >| test.patch')
+            #    print(f'Merge {current_branch} into {branch}\n')
+            #    EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
+            #    EXECUTE(f'git checkout {branch}')
+            #    EXECUTE(f'git merge --no-ff {current_branch} --no-commit')
+            #    if  click.confirm(f'CHECKOUT TO BRANCH `{current_branch}`?'):
+            #        EXECUTE(f'git checkout {current_branch}')
+            #    sys.exit()
     return branch
 
 @click.command()
