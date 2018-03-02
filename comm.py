@@ -25,7 +25,7 @@ class bcolors:
 
 class issue:
     BRANCH = f'\n{bcolors.WARNING}>> BRANCH ISSUE!{bcolors.ENDC}'
-    ABORT = f'\n{bcolors.FAIL}>> ABORT! <<{bcolors.ENDC}'
+    ABORT = f'\n{bcolors.FAIL}>> ABORT!{bcolors.ENDC}'
 
 def EXECUTE(command):
     print(f'{bcolors.OKBLUE}>> EXECUTE: {command}{bcolors.ENDC}')
@@ -62,7 +62,8 @@ def setCommitBranch(branch):
             print(f'You selected branch `{branch}` but it does not exist.\nExisting branch list:')
             [print(f'{idx+1}:', branch) for idx, branch in enumerate(branch_list)]
             if not click.confirm(f'Do you want to make branch `{branch}`?'):
-                ABORT()
+                print(f'{issue.ABORT}')
+                sys.exit(0)
             else:
                 EXECUTE(f'git checkout -b {branch}')
         else:
@@ -84,13 +85,12 @@ def setCommitBranch(branch):
                 if not checkClean():
                     EXECUTE(f'git status')
                     if not click.confirm(f'Do you want to stash your changes and checkout to `{branch}`?'):
-                        EXECUTE('git checkout --force {branch}') 
+                        EXECUTE(f'git checkout --force {branch}') 
                     else:
                         EXECUTE('git stash')
                         EXECUTE(f'git checkout {branch}')
                 #EXECUTE(f'git format-patch master --stdout >| test.patch')
-                print(f'> Merge {current_branch} into {branch}\n')
-                EXECUTE(f'git add .')
+                print(f'Merge {current_branch} into {branch}\n')
                 EXECUTE(f'git commit -m "merge: {current_branch} -> {branch}"')
                 EXECUTE(f'git checkout {branch} >> .git_checkout_log')
                 EXECUTE(f'git merge --no-ff {current_branch} --no-commit')
@@ -113,13 +113,13 @@ def Commit(folder, path, branch, fetch, push, commit, rebase, tag):
     commit_file = os.path.abspath(path)
     os.chdir(git_folder)
 
+    commit_branch = setCommitBranch(branch)
     if fetch:
         EXECUTE(f'git fetch')
     if rebase:
         EXECUTE(f'git rebase')
     if commit:
         EXECUTE(f'git reset')
-        commit_branch = setCommitBranch(branch)
         if len(getModifiedList()) > 0:
             print('\n')
             EXECUTE(f'git add {commit_file}')
