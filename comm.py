@@ -106,18 +106,16 @@ def setCommitBranch(branch):
 @click.option('--branch', default='master', type=str, help='Commiting branch. Default: "master"')
 @click.option('--push', is_flag=True, help='Push or not')
 @click.option('--commit', is_flag=True, help='Commit or not')
-def Commit(folder, path, branch, push, commit, tag):
+@click.option('--reset', is_flag=True, help='Reset or not')
+def Commit(folder, path, branch, push, commit, tag, reset):
     git_folder = os.path.abspath(folder)
     commit_file = os.path.abspath(path)
     os.chdir(git_folder)
 
     commit_branch = setCommitBranch(branch)
-    if fetch:
-        EXECUTE(f'git fetch')
-    if rebase:
-        EXECUTE(f'git rebase')
-    if commit:
+    if reset:
         EXECUTE(f'git reset')
+    if commit:
         if len(getModifiedList()) > 0:
             print('\n')
             EXECUTE(f'git add {commit_file}')
