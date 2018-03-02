@@ -104,11 +104,9 @@ def setCommitBranch(branch):
 @click.option('--path', default='.', type=click.Path(exists=True), help='Path of staing file(s). Default: "."')
 @click.option('--tag', default='NONE', help='What kind of commit. Default: "File Name"')
 @click.option('--branch', default='master', type=str, help='Commiting branch. Default: "master"')
-@click.option('--fetch', is_flag=True, help='Fetch or not')
 @click.option('--push', is_flag=True, help='Push or not')
 @click.option('--commit', is_flag=True, help='Commit or not')
-@click.option('--rebase', is_flag=True, help='Rebase or not')
-def Commit(folder, path, branch, fetch, push, commit, rebase, tag):
+def Commit(folder, path, branch, push, commit, tag):
     git_folder = os.path.abspath(folder)
     commit_file = os.path.abspath(path)
     os.chdir(git_folder)
