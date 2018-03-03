@@ -31,7 +31,10 @@ def setBranch(branch):
         print(f'Branch `{branch}` not found.')
     else:
         print(f'Currently on branch `{current_branch}`', end=' ')
-        print(f'but selected branch is `{branch}`.')
+        print(f'but commiting branch is set to `{branch}`.')
+
+def Commit():
+    pass
 
 @click.command()
 @click.option('--gitpath', default='.', type=click.Path(exists=True), help='Path of .git folder.    Default: .')
@@ -42,8 +45,10 @@ def cmd(gitpath, filepath, branch):
     if current_branch != branch:
         issues.BRANCH()
         setBranch(branch)
-    else:
-        pass
+        sys.exit(0)
+    issues.EXECUTE(f'git add {filepath}')
+    issues.EXECUTE(f'git status')
+    Commit()
 
 def main():
     cmd()
