@@ -15,6 +15,13 @@ class issues:
         if run:
             os.system(command)
 
+def isStatusClean():
+    status_list = sp.getoutput(f'git status').replace(' ','').split('\n')
+    if len(status_list)==4:
+        return True
+    else:
+        return False
+
 def getCurrentBranch(lst=False):
     ''' Returns current branch name '''
     l = sp.getoutput('git branch').split('\n')
@@ -34,6 +41,12 @@ def setBranch(branch):
         print(f'but commiting branch is set to `{branch}`.')
 
 def Commit():
+    issues.EXECUTE(f'git status')
+    print('Commit Message:', end=' ')
+    commit_message = f'{input()}'
+    issues.EXECUTE(f'git commit -m "{commit_message}"')
+
+    
     pass
 
 @click.command()
@@ -47,7 +60,6 @@ def cmd(gitpath, filepath, branch):
         setBranch(branch)
         sys.exit(0)
     issues.EXECUTE(f'git add {filepath}')
-    issues.EXECUTE(f'git status')
     Commit()
 
 def main():
