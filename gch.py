@@ -64,6 +64,7 @@ def Commit():
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
 def isStatusClean():
+    ''' Checks for any modified/new/deleted files since last commit '''
     status_list = sp.getoutput(f'git status').split('\n')
     status_list = [status for status in status_list if status[0:1] =='\t']
     status = True if len(status_list) == 0 else False
