@@ -79,6 +79,27 @@ def getCurrentBranch(lst=False):
     else:
         return current_branch
 
+#randomcomment
+def setCheckout(branch, current_branch, filepath):
+    #issues.EXECUTE(f'git format-patch {branch} --stdout >| {current_branch}.patch', run=True) # Make patch
+    if isStatusClean():
+        issues.EXECUTE(f'git checkout {branch}', run=True)
+    else:
+        print(f'Theres some changes in {current_branch}')
+        selection = [f'Commit changes of `{current_branch}`', \
+                     f'Stash changes of `{current_branch}`', \
+                     f'Force Checkout to `{branch}`', ]
+        answer_2 = getAnswer(selection)
+        if answer_2 == 1:
+            issues.EXECUTE(f'git add {filepath}', run=True)
+            Commit()
+            issues.EXECUTE(f'git checkout {branch}', run=True)
+        elif answer_2 == 2:
+            issues.EXECUTE(f'git stash', run=True)
+            issues.EXECUTE(f'git checkout {branch}', run=True)
+        else:
+            issues.EXECUTE(f'git checkout -f {branch}', run=True)
+
 def setBranch(branch, filepath):
     current_branch, branch_list = getCurrentBranch(lst=True)
     if branch not in branch_list:
@@ -87,43 +108,27 @@ def setBranch(branch, filepath):
         answer = getAnswer(option)
         if answer == 1:
             issues.EXECUTE(f'git checkout -b {branch}', run=True)
-        return current_branch
+        else:
+            print(f'commiting branch set to {current_branch}')
+            branch = current_branch
     else:
         print(f'Currently on branch `{current_branch}`', end=' ')
         print(f'but commiting branch is set to `{branch}`.')
         selection = [f'Merge branch `{current_branch}` -> `{branch}`', \
-                     f'Stash changes and checkout to branch `{branch}`', \
-                     f'Force Checkout to `{branch}`', \
                      f'Stay on branch `{current_branch}`']
         answer = getAnswer(selection)
         if answer == 1:
-            if isStatusClean():
-                issues.EXECUTE(f'git checkout {branch}')
-            else:
-                print(f'Theres some changes in {current_branch}')
-                selection = [f'Commit changes of `{current_branch}`', \
-                             f'Stash changes of `{current_branch}`', \
-                             f'Force Checkout to `{branch}`', ]
-                answer_2 = getAnswer(selection)
-                if answer_2 == 1:
-                    issues.EXECUTE(f'git add {filepath}', run=True)
-                    Commit()
-                    issues.EXECUTE(f'git checkout {branch}')
-                elif answer_2 == 2:
-                    issues.EXECUTE(f'git stash')
-                    issues.EXECUTE(f'git checkout {branch}')
-                else:
-                    issues.EXECUTE(f'git checkout -f {branch}')
-            issues.EXECUTE(f'git merge {current_branch}')
-        elif answer == 2:
-            issues.EXECUTE(f'git stash')
-            issues.EXECUTE(f'git checkout {branch}')
-        elif answer == 3:
-            issues.EXECUTE(f'git checkout -f {branch}')
+            setCheckout(branch, current_branch, filepath)
+            #issues.EXECUTE(f'git apply {current_branch}.patch --check', run=True)
+            issues.EXECUTE(f'git merge {current_branch}', run=True)
+
+            #issues.EXECUTE
+            #issues.EXECUTE(f'git format-patch `git rev-parse --abbrev-ref HEAD`..`git rev-parse --abbrev-ref @{-1}` --stdout | git apply --check', run=True)
+            #issues.EXECUTE(f'git merge {current_branch}')
         else:
             print(f'commiting branch set to {current_branch}')
             branch = current_branch
-        return branch
+    return branch
 
 
 @click.command()
@@ -136,7 +141,7 @@ def cmd(gitpath, filepath, branch, push):
     issues.EXECUTE(f'git fetch origin', run=True)
     if current_branch != branch:
         issues.BRANCH()
-        branch = setBranch(branch)
+        branch = setBranch(branch, filepath)
         
     # Commit or not
     if not isStatusClean():
