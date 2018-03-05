@@ -10,18 +10,41 @@ class issues:
         print(f'\n{bc.WARNING}>> BRANCH ISSUE!{bc.ENDC}')
     def ABORT():
         print(f'\n{bc.FAIL}>> ABORT!{bc.ENDC}')
+    def WARNING():
+        print(f'\n{bc.FAIL}>> WARNING!{bc.ENDC}')
     def EXECUTE(command, run=False):
         print(f'{bc.OKBLUE}>> EXECUTE: {command}{bc.ENDC}')
         if run:
             os.system(command)
 
+def getAnswer(lst):
+    print('Choose from below:')
+    while(1):
+        [print(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
+        answer = input('Answer: ')
+        if answer.isdigit():
+            answer = int(answer)
+            if answer > 0 and answer <= len(lst):
+                break;
+            else:
+                issues.WARNING()
+                print('Please choose right answer from below:')
+        else:
+            issues.WARNING()
+            print('Please choose right answer from below:')
+    
+    return answer
+
 def isStatusClean():
-    status_list = sp.getoutput(f'git status').replace(' ','').split('\n')
-    if len(status_list)==4:
+    status_list = sp.getoutput(f'git status').split('\n')
+    print(status_list[2][0])
+    if status_list[2][0] != 'C':
+        print('clean')
         return True
     else:
+        print('dirty')
         return False
-
+# random comment
 def getCurrentBranch(lst=False):
     ''' Returns current branch name '''
     l = sp.getoutput('git branch').split('\n')
@@ -34,6 +57,9 @@ def getCurrentBranch(lst=False):
 
 def setBranch(branch):
     current_branch, branch_list = getCurrentBranch(lst=True)
+    isStatusClean()
+    selection = ['Merge branches', 'Stash changes and exit', 'Force Checkout to branch', 'Stay on branch']
+    answer = getAnswer(selection)
     if branch not in branch_list:
         print(f'Branch `{branch}` not found.')
     else:
@@ -42,8 +68,7 @@ def setBranch(branch):
 
 def Commit():
     issues.EXECUTE(f'git status')
-    print('Commit Message:', end=' ')
-    commit_message = f'{input()}'
+    commit_message = input('Commit Message:')
     issues.EXECUTE(f'git commit -m "{commit_message}"')
 
     
