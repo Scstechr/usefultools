@@ -88,6 +88,10 @@ def cmd(gitpath, filepath, branch):
         sys.exit(0)
     issues.EXECUTE(f'git add {filepath}', run=True)
     Commit()
+    if not click.confirm(f'Push?'):
+        print('** no push **')
+    else:
+        issues.EXECUTE(f'git push origin {branch}')
 
 def main():
     cmd()
