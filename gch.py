@@ -58,9 +58,6 @@ exp_fp = 'Path of staging file(s). => Default: .'
 exp_br = 'Commiting branch.        => Default: master'
 exp_pu = 'Push or not. Flag.       => Default: False'
 
-
-
-
 def Commit():
     issues.EXECUTE(f'git status', run=True)
     commit_message = input('Commit Message: ')
@@ -68,6 +65,10 @@ def Commit():
 
 def isStatusClean():
     status_list = sp.getoutput(f'git status').split('\n')
+    status_list = [status for status in status_list if status[0:1] =='\t']
+    print(status_list)
+
+    sys.exit(0)
     status = True if status_list[2][0] != 'C' and status_list[3][0] != 'C' else False
     return status
 
@@ -156,4 +157,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
