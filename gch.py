@@ -37,14 +37,10 @@ def getAnswer(lst):
 
 def isStatusClean():
     status_list = sp.getoutput(f'git status').split('\n')
-    print(status_list[2][0])
-    if status_list[2][0] != 'C':
-        print('clean')
-        return True
-    else:
-        print('dirty')
-        return False
-# random comment
+    os.system('git status')
+    status = True if status_list[2][0] != 'C' and status_list[3][0] != 'C' else False
+    return status
+
 def getCurrentBranch(lst=False):
     ''' Returns current branch name '''
     l = sp.getoutput('git branch').split('\n')
@@ -57,34 +53,40 @@ def getCurrentBranch(lst=False):
 
 def setBranch(branch):
     current_branch, branch_list = getCurrentBranch(lst=True)
-    isStatusClean()
-    selection = ['Merge branches', 'Stash changes and exit', 'Force Checkout to branch', 'Stay on branch']
-    answer = getAnswer(selection)
+    print('clean') if isStatusClean() else print('dirty')
+        
+    
     if branch not in branch_list:
         print(f'Branch `{branch}` not found.')
     else:
+        selection = ['Merge branches', 'Stash changes and exit', 'Force Checkout to branch', 'Stay on branch']
+        answer = getAnswer(selection)
         print(f'Currently on branch `{current_branch}`', end=' ')
         print(f'but commiting branch is set to `{branch}`.')
 
 def Commit():
     issues.EXECUTE(f'git status')
     commit_message = input('Commit Message:')
-    issues.EXECUTE(f'git commit -m "{commit_message}"')
+    issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
     
     pass
 
+exp_gp = 'Path of .git folder.     => Default: .'
+exp_fp = 'Path of staging file(s). => Default: .'
+exp_br = 'Commiting branch.        => Default: master'
+
 @click.command()
-@click.option('--gitpath', default='.', type=click.Path(exists=True), help='Path of .git folder.    Default: .')
-@click.option('--filepath', default='.', type=click.Path(exists=True), help='Path of staing file(s). Default: .')
-@click.option('--branch', default='master', type=str, help='Commiting branch.       Default: master')
+@click.option('--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
+@click.option('--filepath', default='.', type=click.Path(exists=True), help=exp_fp)
+@click.option('--branch', default='master', type=str, help=exp_br)
 def cmd(gitpath, filepath, branch):
     current_branch = getCurrentBranch()
     if current_branch != branch:
         issues.BRANCH()
         setBranch(branch)
         sys.exit(0)
-    issues.EXECUTE(f'git add {filepath}')
+    issues.EXECUTE(f'git add {filepath}', run=True)
     Commit()
 
 def main():
