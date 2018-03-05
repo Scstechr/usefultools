@@ -133,7 +133,7 @@ def setBranch(branch, filepath):
 @click.option('--push', is_flag='False', help=exp_pu)
 def cmd(gitpath, filepath, branch, push):
     current_branch = getCurrentBranch()
-    issues.EXECUTE(f'git fetch origin {branch}', run=True)
+    issues.EXECUTE(f'git fetch origin', run=True)
     if current_branch != branch:
         issues.BRANCH()
         branch = setBranch(branch)
