@@ -65,6 +65,7 @@ exp_br = 'Commiting branch.        => Default: master'
 exp_pu = 'Push or not. Flag.       => Default: False'
 
 def Commit():
+    issues.EXECUTE(f'git diff --cached', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
