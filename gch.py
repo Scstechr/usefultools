@@ -24,7 +24,6 @@ class issues:
             os.system(command)
 
 def getAnswer(lst):
-    print('Choose from below:')
     while(1):
         [print(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
         answer = input('Answer: ')
@@ -43,7 +42,6 @@ def getAnswer(lst):
 
 def isStatusClean():
     status_list = sp.getoutput(f'git status').split('\n')
-    os.system('git status')
     status = True if status_list[2][0] != 'C' and status_list[3][0] != 'C' else False
     return status
 
@@ -59,16 +57,21 @@ def getCurrentBranch(lst=False):
 
 def setBranch(branch):
     current_branch, branch_list = getCurrentBranch(lst=True)
-    print('clean') if isStatusClean() else print('dirty')
-        
-    
+    # print('clean') if isStatusClean() else print('dirty')
     if branch not in branch_list:
         print(f'Branch `{branch}` not found.')
+        option = [f'Make new branch `{branch}`', f'Stay on current branch `{current_branch}`']
+        answer = getAnswer(option)
+        if answer == 1:
+            issues.EXECUTE(f'git checkout -b {branch}')
+        return current_branch
     else:
         selection = ['Merge branches', 'Stash changes and exit', 'Force Checkout to branch', 'Stay on branch']
         answer = getAnswer(selection)
         print(f'Currently on branch `{current_branch}`', end=' ')
         print(f'but commiting branch is set to `{branch}`.')
+        sys.exit(0)
+        return branch
 
 def Commit():
     issues.EXECUTE(f'git status', run=True)
@@ -84,8 +87,7 @@ def cmd(gitpath, filepath, branch, push):
     current_branch = getCurrentBranch()
     if current_branch != branch:
         issues.BRANCH()
-        setBranch(branch)
-        sys.exit(0)
+        branch = setBranch(branch)
     issues.EXECUTE(f'git add {filepath}', run=True)
     Commit()
     if not push:
