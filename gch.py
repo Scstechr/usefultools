@@ -5,6 +5,11 @@ import os, sys, subprocess as sp
 # from outside and own library
 import click, bcolors as bc
 
+# Explanation of the options
+exp_gp = 'Path of .git folder.     => Default: .'
+exp_fp = 'Path of staging file(s). => Default: .'
+exp_br = 'Commiting branch.        => Default: master'
+
 class issues:
     def BRANCH():
         print(f'\n{bc.WARNING}>> BRANCH ISSUE!{bc.ENDC}')
@@ -68,13 +73,6 @@ def Commit():
     issues.EXECUTE(f'git status', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
-
-    
-    pass
-
-exp_gp = 'Path of .git folder.     => Default: .'
-exp_fp = 'Path of staging file(s). => Default: .'
-exp_br = 'Commiting branch.        => Default: master'
 
 @click.command()
 @click.option('--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
