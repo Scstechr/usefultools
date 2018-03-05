@@ -94,6 +94,8 @@ def cmd(gitpath, filepath, branch, push):
     if not isStatusClean():
         issues.EXECUTE(f'git add {filepath}', run=True)
         Commit()
+    else:
+        issues.EXECUTE(f'git status')
     if not push:
         print('** no push **')
     else:
