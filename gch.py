@@ -16,9 +16,7 @@ class issues:
     def EXECUTE(command, run=False):
         print(f'{bc.OKBLUE}>> EXECUTE: {command}{bc.ENDC}')
         if run:
-            #sp.call(command, shell=True)
-            #sp.run(command)
-            os.system(command)
+            sp.call(command, shell=True)
 
 title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
 title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
