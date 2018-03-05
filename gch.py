@@ -65,8 +65,8 @@ def setBranch(branch):
         print(f'but commiting branch is set to `{branch}`.')
 
 def Commit():
-    issues.EXECUTE(f'git status')
-    commit_message = input('Commit Message:')
+    issues.EXECUTE(f'git status', run=True)
+    commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
     
