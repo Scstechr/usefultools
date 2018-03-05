@@ -91,7 +91,7 @@ def cmd(gitpath, filepath, branch):
     if not click.confirm(f'Push?'):
         print('** no push **')
     else:
-        issues.EXECUTE(f'git push origin {branch}')
+        issues.EXECUTE(f'git push origin {branch}', run=True)
 
 def main():
     cmd()
