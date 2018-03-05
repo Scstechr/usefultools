@@ -1,15 +1,10 @@
+#!/usr/bin/env python
 # Git Commit Handler
 
 # from standard library
 import os, sys, subprocess as sp
 # from outside and own library
-import click, bcolors as bc
-
-# Explanation of the options
-exp_gp = 'Path of .git folder.     => Default: .'
-exp_fp = 'Path of staging file(s). => Default: .'
-exp_br = 'Commiting branch.        => Default: master'
-exp_pu = 'Push or not. Flag.       => Default: False'
+import bcolors as bc
 
 class issues:
     def BRANCH():
@@ -22,6 +17,20 @@ class issues:
         print(f'{bc.OKBLUE}>> EXECUTE: {command}{bc.ENDC}')
         if run:
             os.system(command)
+
+title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
+title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
+title += '\n ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─'
+
+print(title)
+
+try:
+    import click
+except:
+    issues.WARNING()
+    print('This command needs package: click')
+    print('Please execute `conda install click` or `pip install click`')
+    sys.exit()
 
 def getAnswer(lst):
     lst.append('Abort')
@@ -42,6 +51,15 @@ def getAnswer(lst):
             issues.WARNING()
             print('Please choose right answer from below:')
     return answer
+
+# Explanation of the options
+exp_gp = 'Path of .git folder.     => Default: .'
+exp_fp = 'Path of staging file(s). => Default: .'
+exp_br = 'Commiting branch.        => Default: master'
+exp_pu = 'Push or not. Flag.       => Default: False'
+
+
+
 
 def Commit():
     issues.EXECUTE(f'git status', run=True)
@@ -117,12 +135,12 @@ def setBranch(branch, filepath):
 @click.option('--push', is_flag='False', help=exp_pu)
 def cmd(gitpath, filepath, branch, push):
     current_branch = getCurrentBranch()
+    issues.EXECUTE(f'git fetch origin {branch}', run=True)
     if current_branch != branch:
         issues.BRANCH()
         branch = setBranch(branch)
         
     # Commit or not
-    #issues.EXECUTE(f'git status', run=True)
     if not isStatusClean():
         issues.EXECUTE(f'git add {filepath}', run=True)
         Commit()
