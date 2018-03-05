@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
 title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
 title += '\n ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─'
@@ -17,7 +18,6 @@ class issues:
         if run:
             sp.call(command, shell=True)
 
-
 try:
     import click
 except ImportError:
@@ -35,6 +35,7 @@ except ImportError:
             print('Aborting process...')
             sys.exit()
         else:
+            issues.WARNING()
             answer = input('Please choose y or N: ')
 
 def getAnswer(lst):
@@ -64,8 +65,6 @@ exp_br = 'Commiting branch.        => Default: master'
 exp_pu = 'Push or not. Flag.       => Default: False'
 
 def Commit():
-    #issues.EXECUTE(f'git status', run=True)
-    #issues.EXECUTE(f'git diff --stat', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
@@ -159,7 +158,6 @@ def cmd(gitpath, filepath, branch, push):
         issues.EXECUTE(f'git push -u origin {branch}', run=True)
 
 def main():
-
     print(title)
     cmd()
 
