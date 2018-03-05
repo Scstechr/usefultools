@@ -24,11 +24,18 @@ print(title)
 
 try:
     import click
-except:
-    issues.WARNING()
-    print('This command needs package: click')
-    print('Please execute `conda install click` or `pip install click`')
-    sys.exit()
+except ImportError:
+    answer = input('package `click` needs to be installed...install? [y/N]')
+    while(1):
+        if answer=='y':
+            sp.call('conda install click', shell=True)
+            import click
+            break;
+        elif answer == 'N':
+            print('Aborting process...')
+            sys.exit()
+        else:
+            answer = input('Please choose y or N: ')
 
 def getAnswer(lst):
     lst.append('Abort')
