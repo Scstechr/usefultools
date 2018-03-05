@@ -25,10 +25,14 @@ print(title)
 try:
     import click
 except ImportError:
-    answer = input('package `click` needs to be installed...install? [y/N]')
+    answer = input('package `click` needs to be installed...install? [y/N]:')
     while(1):
         if answer=='y':
-            sp.call('conda install click', shell=True)
+            pythonver = sp.getoutput(f'python --version ')
+            if pythonver.find('Anaconda') > 0:
+                issues.EXECUTE('conda install click', run=True)
+            else:
+                issues.EXECUTE('pip install click', run=True)
             import click
             break;
         elif answer == 'N':
