@@ -80,6 +80,7 @@ def getCurrentBranch(lst=False):
         return current_branch
 
 def setCheckout(branch, current_branch, filepath):
+    ''' Handles Checkout Matters '''
     #issues.EXECUTE(f'git format-patch {branch} --stdout >| {current_branch}.patch', run=True) # Make patch
     if isStatusClean():
         issues.EXECUTE(f'git checkout {branch}', run=True)
