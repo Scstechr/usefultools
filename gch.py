@@ -9,6 +9,7 @@ import click, bcolors as bc
 exp_gp = 'Path of .git folder.     => Default: .'
 exp_fp = 'Path of staging file(s). => Default: .'
 exp_br = 'Commiting branch.        => Default: master'
+exp_pu = 'Push or not. Flag.       => Default: False'
 
 class issues:
     def BRANCH():
@@ -78,7 +79,8 @@ def Commit():
 @click.option('--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
 @click.option('--filepath', default='.', type=click.Path(exists=True), help=exp_fp)
 @click.option('--branch', default='master', type=str, help=exp_br)
-def cmd(gitpath, filepath, branch):
+@click.option('--push', is_flag='False', help=exp_pu)
+def cmd(gitpath, filepath, branch, push):
     current_branch = getCurrentBranch()
     if current_branch != branch:
         issues.BRANCH()
@@ -86,7 +88,7 @@ def cmd(gitpath, filepath, branch):
         sys.exit(0)
     issues.EXECUTE(f'git add {filepath}', run=True)
     Commit()
-    if not click.confirm(f'Push?'):
+    if not push:
         print('** no push **')
     else:
         issues.EXECUTE(f'git push origin {branch}', run=True)
