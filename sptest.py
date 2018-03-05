@@ -7,4 +7,4 @@ for key in myenv.keys():
     print(key, '\t', myenv[key])
     
 #sp.call('git config --list', shell=True)
-sp.call('git push -u origin master', shell=True, env=myenv)
+sp.Popen('git push -u origin master', shell=True, env=myenv)
