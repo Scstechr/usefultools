@@ -24,20 +24,23 @@ class issues:
             os.system(command)
 
 def getAnswer(lst):
+    lst.append('Abort')
     while(1):
         [print(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
         answer = input('Answer: ')
         if answer.isdigit():
             answer = int(answer)
-            if answer > 0 and answer <= len(lst):
+            if answer > 0 and answer < len(lst):
                 break;
+            elif answer == len(lst):
+                issues.ABORT()
+                sys.exit(0)
             else:
                 issues.WARNING()
                 print('Please choose right answer from below:')
         else:
             issues.WARNING()
             print('Please choose right answer from below:')
-    
     return answer
 
 def isStatusClean():
@@ -63,7 +66,7 @@ def setBranch(branch):
         option = [f'Make new branch `{branch}`', f'Stay on current branch `{current_branch}`']
         answer = getAnswer(option)
         if answer == 1:
-            issues.EXECUTE(f'git checkout -b {branch}')
+            issues.EXECUTE(f'git checkout -b {branch}', run=True)
         return current_branch
     else:
         selection = ['Merge branches', 'Stash changes and exit', 'Force Checkout to branch', 'Stay on branch']
@@ -88,8 +91,9 @@ def cmd(gitpath, filepath, branch, push):
     if current_branch != branch:
         issues.BRANCH()
         branch = setBranch(branch)
-    issues.EXECUTE(f'git add {filepath}', run=True)
-    Commit()
+    if not isStatusClean():
+        issues.EXECUTE(f'git add {filepath}', run=True)
+        Commit()
     if not push:
         print('** no push **')
     else:
