@@ -6,5 +6,6 @@ myenv = os.environ.copy()
 for key in myenv.keys():
     print(key, '\t', myenv[key])
     
-#sp.call('git config --list', shell=True)
-sp.Popen('git push -u origin master', shell=True, env=myenv)
+cmd = 'git push -u origin master'.split(' ')
+print(cmd)
+sp.run(cmd)
