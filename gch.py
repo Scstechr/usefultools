@@ -59,7 +59,9 @@ exp_br = 'Commiting branch.        => Default: master'
 exp_pu = 'Push or not. Flag.       => Default: False'
 
 def Commit():
-    issues.EXECUTE(f'git status', run=True)
+    #issues.EXECUTE(f'git status', run=True)
+    issues.EXECUTE(f'git diff HEAD^', run=True)
+    issues.EXECUTE(f'git diff --stat', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
@@ -141,6 +143,7 @@ def cmd(gitpath, filepath, branch, push):
         
     # Commit or not
     if not isStatusClean():
+        issues.EXECUTE(f'git diff', run=True)
         issues.EXECUTE(f'git add {filepath}', run=True)
         Commit()
     else:
@@ -150,7 +153,7 @@ def cmd(gitpath, filepath, branch, push):
     if not push:
         print('** no push **')
     else:
-        issues.EXECUTE(f'git push origin {branch}', run=True)
+        issues.EXECUTE(f'git push -u origin {branch}', run=True)
 
 def main():
     cmd()
