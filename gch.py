@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-# Git Commit Handler
+title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
+title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
+title += '\n ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─'
 
-# from standard library
 import os, sys, subprocess as sp
 
 class issues:
@@ -16,11 +17,6 @@ class issues:
         if run:
             sp.call(command, shell=True)
 
-title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
-title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
-title += '\n ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─'
-
-print(title)
 
 try:
     import click
@@ -92,7 +88,6 @@ def getCurrentBranch(lst=False):
 
 def setCheckout(branch, current_branch, filepath):
     ''' Handles Checkout Matters '''
-    #issues.EXECUTE(f'git format-patch {branch} --stdout >| {current_branch}.patch', run=True) # Make patch
     if isStatusClean():
         issues.EXECUTE(f'git checkout {branch}', run=True)
     else:
@@ -164,9 +159,10 @@ def cmd(gitpath, filepath, branch, push):
         issues.EXECUTE(f'git push -u origin {branch}', run=True)
 
 def main():
+
+    print(title)
     cmd()
+
 
 if __name__ == "__main__":
     main()
-
-
