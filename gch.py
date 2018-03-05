@@ -3,18 +3,16 @@
 
 # from standard library
 import os, sys, subprocess as sp
-# from outside and own library
-import bcolors as bc
 
 class issues:
     def BRANCH():
-        print(f'\n{bc.WARNING}>> BRANCH ISSUE!{bc.ENDC}')
+        print(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
     def ABORT():
-        print(f'\n{bc.FAIL}>> ABORT!{bc.ENDC}')
+        print(f'\n\033[91m>> ABORT!\033[0m')
     def WARNING():
-        print(f'\n{bc.FAIL}>> WARNING!{bc.ENDC}')
+        print(f'\n\033[91m>> WARNING!\033[0m')
     def EXECUTE(command, run=False):
-        print(f'{bc.OKBLUE}>> EXECUTE: {command}{bc.ENDC}')
+        print(f'\033[94m>> EXECUTE: {command}\033[0m')
         if run:
             sp.call(command, shell=True)
 
