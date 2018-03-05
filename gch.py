@@ -79,7 +79,6 @@ def getCurrentBranch(lst=False):
     else:
         return current_branch
 
-#randomcomment
 def setCheckout(branch, current_branch, filepath):
     #issues.EXECUTE(f'git format-patch {branch} --stdout >| {current_branch}.patch', run=True) # Make patch
     if isStatusClean():
