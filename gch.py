@@ -16,8 +16,9 @@ class issues:
     def EXECUTE(command, run=False):
         print(f'{bc.OKBLUE}>> EXECUTE: {command}{bc.ENDC}')
         if run:
-            sp.call(command, shell=True)
-            #os.system(command)
+            #sp.call(command, shell=True)
+            #sp.run(command)
+            os.system(command)
 
 title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
 title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
@@ -61,7 +62,7 @@ exp_pu = 'Push or not. Flag.       => Default: False'
 
 def Commit():
     #issues.EXECUTE(f'git status', run=True)
-    issues.EXECUTE(f'git diff --stat', run=True)
+    #issues.EXECUTE(f'git diff --stat', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
@@ -143,7 +144,7 @@ def cmd(gitpath, filepath, branch, push):
         
     # Commit or not
     if not isStatusClean():
-        issues.EXECUTE(f'git diff', run=True)
+        issues.EXECUTE(f'git diff --stat', run=True)
         issues.EXECUTE(f'git add {filepath}', run=True)
         Commit()
     else:
