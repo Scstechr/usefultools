@@ -133,17 +133,15 @@ def setBranch(branch, filepath):
             branch = current_branch
     return branch
 
-def checkGitFolder(gitpath):
-    if os.path.exists:
-        pass
 
 @click.command()
-@click.option('--gitpath', default='.', type=str, help=exp_gp)
-@click.option('--filepath', default='.', type=str, help=exp_fp)
+@click.option('--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
+@click.option('--filepath', default='.', type=click.Path(exists=True), help=exp_fp)
 @click.option('--branch', default='master', type=str, help=exp_br)
 @click.option('--push', is_flag='False', help=exp_pu)
 def cmd(gitpath, filepath, branch, push):
     current_branch = getCurrentBranch()
+    os.chdir(gitpath)
     issues.EXECUTE(f'git fetch origin', run=True)
     if current_branch != branch:
         issues.BRANCH()
