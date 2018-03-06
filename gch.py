@@ -140,6 +140,8 @@ def setBranch(branch, filepath):
 @click.option('--branch', default='master', type=str, help=exp_br)
 @click.option('--push', is_flag='False', help=exp_pu)
 def cmd(gitpath, filepath, branch, push):
+    gitpath = os.path.abspath(gitpath)
+    filepath = os.path.abspath(filepath)
     current_branch = getCurrentBranch()
     os.chdir(gitpath)
     issues.EXECUTE(f'git fetch origin', run=True)
