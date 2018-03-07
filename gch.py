@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 
-# Title string 
-title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
-title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
-title += '\n ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─'
-
-# Explanation of the options
+# Explanation of the options showed in --help flag
 exp_gp = 'Path of .git folder.     => Default: .'
 exp_fp = 'Path of staging file(s). => Default: .'
 exp_br = 'Commiting branch.        => Default: master'
@@ -24,8 +19,7 @@ class issues:
         print(f'\n\033[91m>> WARNING!\033[0m')
     def EXECUTE(command, run=False):
         print(f'\033[94m>> EXECUTE: {command}\033[0m')
-        if run:
-            sp.call(command, shell=True)
+        sp.call(command, shell=run)
 
 # Import Click
 try:
@@ -194,6 +188,11 @@ def cmd(gitpath, filepath, branch, push, detail):
 
 
 def main():
+    # Title string 
+    title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
+    title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
+    title += '\n ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─'
+
     print(title)
     cmd()
 
