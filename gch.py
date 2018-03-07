@@ -133,6 +133,26 @@ def setBranch(branch, filepath):
             branch = current_branch
     return branch
 
+def isGitExist(gitpath):
+    gitfolder = os.path.join(gitpath, '.git')
+    if not os.path.exists(gitfolder):
+        return False
+    else:
+        return True
+
+def isRemoteExist():
+    git = sp.getoutput('git remote -v')
+    if len(git) == 0:
+        return False
+    else:
+        return True
+
+def isBranchExist():
+    git = sp.getoutput('git branch')
+    if len(git) == 0:
+        return False
+    else:
+        return True
 
 @click.command()
 @click.option('--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
@@ -140,14 +160,27 @@ def setBranch(branch, filepath):
 @click.option('--branch', default='master', type=str, help=exp_br)
 @click.option('--push', is_flag='False', help=exp_pu)
 def cmd(gitpath, filepath, branch, push):
+
+    #conversion to absolute gitpathpath
     gitpath = os.path.abspath(gitpath)
     filepath = os.path.abspath(filepath)
-    current_branch = getCurrentBranch()
+
     os.chdir(gitpath)
-    issues.EXECUTE(f'git fetch origin', run=True)
-    if current_branch != branch:
-        issues.BRANCH()
-        branch = setBranch(branch, filepath)
+
+    if not isGitExist(gitpath):
+        issues.WARNING()
+        print(f'It seems path:`{gitpath}` does not have `.git` folder')
+        answer = getAnswer([f'Initialize `.git` folder'])
+        issues.EXECUTE('git init', run=True)
+
+    if isRemoteExist():
+        issues.EXECUTE(f'git fetch origin', run=True)
+
+    if isBranchExist():
+        current_branch = getCurrentBranch()
+        if current_branch != branch:
+            issues.BRANCH()
+            branch = setBranch(branch, filepath)
         
     # Commit or not
     if not isStatusClean():
