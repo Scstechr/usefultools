@@ -73,7 +73,6 @@ def Commit(detail):
 
 def isStatusClean():
     ''' Checks for any modified/new/deleted files since last commit '''
-    #status_list = sp.getoutput(f'git status').split('\n')
     status_list = [status for status in sp.getoutput(f'git status').split('\n') if status[0:1] =='\t']
     status = True if len(status_list) == 0 else False
     return status
