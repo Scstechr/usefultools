@@ -9,10 +9,7 @@ exp_de = 'Detailed diff. Flag.     => Default: False'
 
 import os, sys, subprocess as sp
 
-# Print w/ color
-def paas():
-    pass
-
+# Print w/ color and run shell commands in EXECUTE
 class issues:
     def BRANCH():
         print(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
