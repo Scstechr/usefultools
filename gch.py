@@ -161,7 +161,7 @@ def isBranchExist():
 @click.option('--push', is_flag='False', help=exp_pu)
 def cmd(gitpath, filepath, branch, push):
 
-    #conversion to absolute gitpathpath
+    #conversion to absolute path
     gitpath = os.path.abspath(gitpath)
     filepath = os.path.abspath(filepath)
 
