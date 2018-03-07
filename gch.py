@@ -1,11 +1,20 @@
 #!/usr/bin/env python
 
+# Title string 
 title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
 title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
 title += '\n ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─'
 
+# Explanation of the options
+exp_gp = 'Path of .git folder.     => Default: .'
+exp_fp = 'Path of staging file(s). => Default: .'
+exp_br = 'Commiting branch.        => Default: master'
+exp_pu = 'Push or not. Flag.       => Default: False'
+exp_de = 'Detailed diff. Flag.     => Default: False'
+
 import os, sys, subprocess as sp
 
+# Print w/ color
 class issues:
     def BRANCH():
         print(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
@@ -18,6 +27,7 @@ class issues:
         if run:
             sp.call(command, shell=True)
 
+# Import Click
 try:
     import click
 except ImportError:
@@ -38,7 +48,9 @@ except ImportError:
             issues.WARNING()
             answer = input('Please choose y or N: ')
 
+# Generates selection list and answering sequence
 def getAnswer(lst):
+    # Adds Abort as a option
     lst.append('Abort')
     while(1):
         [print(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
@@ -58,14 +70,9 @@ def getAnswer(lst):
             print('Please choose right answer from below:')
     return answer
 
-# Explanation of the options
-exp_gp = 'Path of .git folder.     => Default: .'
-exp_fp = 'Path of staging file(s). => Default: .'
-exp_br = 'Commiting branch.        => Default: master'
-exp_pu = 'Push or not. Flag.       => Default: False'
-exp_de = 'Detailed diff. Flag.     => Default: False'
 
 def Commit(detail):
+    ''' Commit '''
     if detail:
         issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
     commit_message = input('Commit Message: ')
