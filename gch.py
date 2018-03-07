@@ -135,10 +135,8 @@ def setBranch(branch, filepath):
 
 def isGitExist(gitpath):
     gitfolder = os.path.join(gitpath, '.git')
-    if not os.path.exists(gitfolder):
-        return False
-    else:
-        return True
+    flag = False if not os.path.exists(gitfolder) else True
+    return flag
 
 def isRemoteExist():
     git = sp.getoutput('git remote -v')
