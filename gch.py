@@ -138,13 +138,8 @@ def isGitExist(gitpath):
     flag = True if os.path.exists(gitfolder) else False
     return flag
 
-def isRemoteExist():
-    git = sp.getoutput('git remote -v')
-    flag = False if len(git) == 0 else True
-    return flag
-
-def isBranchExist():
-    git = sp.getoutput('git branch')
+def isExist(command):
+    git = sp.getoutput(command)
     flag = False if len(git) == 0 else True
     return flag
 
@@ -168,10 +163,10 @@ def cmd(gitpath, filepath, branch, push, detail):
         answer = getAnswer([f'Initialize `.git` folder'])
         issues.EXECUTE('git init', run=True)
 
-    if isRemoteExist():
+    if isExist('git remove -v'):
         issues.EXECUTE(f'git fetch origin', run=True)
 
-    if isBranchExist():
+    if isExist('git branch'):
         current_branch = getCurrentBranch()
         if current_branch != branch:
             issues.BRANCH()
