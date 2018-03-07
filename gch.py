@@ -139,8 +139,8 @@ def isGitExist(gitpath):
     return flag
 
 def isExist(command):
-    git = sp.getoutput(command)
-    flag = False if len(git) == 0 else True
+    output = sp.getoutput(command)
+    flag = False if len(output) == 0 else True
     return flag
 
 @click.command()
