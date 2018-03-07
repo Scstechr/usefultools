@@ -10,6 +10,9 @@ exp_de = 'Detailed diff. Flag.     => Default: False'
 import os, sys, subprocess as sp
 
 # Print w/ color
+def paas():
+    pass
+
 class issues:
     def BRANCH():
         print(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
@@ -19,7 +22,7 @@ class issues:
         print(f'\n\033[91m>> WARNING!\033[0m')
     def EXECUTE(command, run=False):
         print(f'\033[94m>> EXECUTE: {command}\033[0m')
-        sp.call(command, shell=run)
+        sp.call(command, shell=True) if run == True else paas()
 
 # Import Click
 try:
