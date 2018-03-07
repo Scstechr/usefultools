@@ -193,8 +193,11 @@ def cmd(gitpath, filepath, branch, push):
     # Push or not
     if not push:
         print('** no push **')
+    elif not isRemoteExist():
+        print('** no remote repository **')
     else:
         issues.EXECUTE(f'git push -u origin {branch}', run=True)
+
 
 def main():
     print(title)
