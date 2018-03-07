@@ -65,8 +65,9 @@ exp_br = 'Commiting branch.        => Default: master'
 exp_pu = 'Push or not. Flag.       => Default: False'
 exp_de = 'Detailed diff. Flag.     => Default: False'
 
-def Commit():
-    issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
+def Commit(detail):
+    if detail:
+        issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
@@ -87,7 +88,7 @@ def getCurrentBranch(lst=False):
     else:
         return current_branch
 
-def setCheckout(branch, current_branch, filepath):
+def setCheckout(branch, current_branch, filepath, detail):
     ''' Handles Checkout Matters '''
     if isStatusClean():
         issues.EXECUTE(f'git checkout {branch}', run=True)
@@ -99,7 +100,7 @@ def setCheckout(branch, current_branch, filepath):
         answer_2 = getAnswer(selection)
         if answer_2 == 1:
             issues.EXECUTE(f'git add {filepath}', run=True)
-            Commit()
+            Commit(detail)
             issues.EXECUTE(f'git checkout {branch}', run=True)
         elif answer_2 == 2:
             issues.EXECUTE(f'git stash', run=True)
@@ -186,7 +187,7 @@ def cmd(gitpath, filepath, branch, push, detail):
     if not isStatusClean():
         issues.EXECUTE(f'git diff --stat', run=True)
         issues.EXECUTE(f'git add {filepath}', run=True)
-        Commit()
+        Commit(detail)
     else:
         print('Clean State')
 
