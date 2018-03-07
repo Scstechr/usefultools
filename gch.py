@@ -22,7 +22,8 @@ class issues:
         print(f'\n\033[91m>> WARNING!\033[0m')
     def EXECUTE(command, run=False):
         print(f'\033[94m>> EXECUTE: {command}\033[0m')
-        sp.call(command, shell=True) if run == True else paas()
+        if run == True:
+            sp.call(command, shell=True)
 
 # Import Click
 try:
