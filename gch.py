@@ -187,7 +187,7 @@ def cmd(gitpath, filepath, branch, push, detail):
     # Push or not
     if not push:
         print('** no push **')
-    elif not isRemoteExist():
+    elif not isExist(f'git remote -v'):
         print('** no remote repository **')
     else:
         issues.EXECUTE(f'git push -u origin {branch}', run=True)
