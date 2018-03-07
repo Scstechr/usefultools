@@ -135,22 +135,18 @@ def setBranch(branch, filepath):
 
 def isGitExist(gitpath):
     gitfolder = os.path.join(gitpath, '.git')
-    flag = False if not os.path.exists(gitfolder) else True
+    flag = True if os.path.exists(gitfolder) else False
     return flag
 
 def isRemoteExist():
     git = sp.getoutput('git remote -v')
-    if len(git) == 0:
-        return False
-    else:
-        return True
+    flag = False if len(git) == 0 else True
+    return flag
 
 def isBranchExist():
     git = sp.getoutput('git branch')
-    if len(git) == 0:
-        return False
-    else:
-        return True
+    flag = False if len(git) == 0 else True
+    return flag
 
 @click.command()
 @click.option('--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
