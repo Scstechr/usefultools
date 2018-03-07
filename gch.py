@@ -63,6 +63,7 @@ exp_gp = 'Path of .git folder.     => Default: .'
 exp_fp = 'Path of staging file(s). => Default: .'
 exp_br = 'Commiting branch.        => Default: master'
 exp_pu = 'Push or not. Flag.       => Default: False'
+exp_de = 'Detailed diff. Flag.     => Default: False'
 
 def Commit():
     issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
@@ -157,7 +158,8 @@ def isBranchExist():
 @click.option('--filepath', default='.', type=click.Path(exists=True), help=exp_fp)
 @click.option('--branch', default='master', type=str, help=exp_br)
 @click.option('--push', is_flag='False', help=exp_pu)
-def cmd(gitpath, filepath, branch, push):
+@click.option('--detail', is_flag='False', help=exp_de)
+def cmd(gitpath, filepath, branch, push, detail):
 
     #conversion to absolute path
     gitpath = os.path.abspath(gitpath)
