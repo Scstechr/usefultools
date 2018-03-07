@@ -73,8 +73,8 @@ def Commit(detail):
 
 def isStatusClean():
     ''' Checks for any modified/new/deleted files since last commit '''
-    status_list = sp.getoutput(f'git status').split('\n')
-    status_list = [status for status in status_list if status[0:1] =='\t']
+    #status_list = sp.getoutput(f'git status').split('\n')
+    status_list = [status for status in sp.getoutput(f'git status').split('\n') if status[0:1] =='\t']
     status = True if len(status_list) == 0 else False
     return status
 
@@ -94,10 +94,9 @@ def setCheckout(branch, current_branch, filepath, detail):
         issues.EXECUTE(f'git checkout {branch}', run=True)
     else:
         print(f'Theres some changes in {current_branch}')
-        selection = [f'Commit changes of `{current_branch}`', \
-                     f'Stash changes of `{current_branch}`', \
-                     f'Force Checkout to `{branch}`', ]
-        answer_2 = getAnswer(selection)
+        answer_2 = getAnswer([f'Commit changes of `{current_branch}`', \
+                              f'Stash changes of `{current_branch}`', \
+                              f'Force Checkout to `{branch}`', ])
         if answer_2 == 1:
             issues.EXECUTE(f'git add {filepath}', run=True)
             Commit(detail)
@@ -112,19 +111,18 @@ def setBranch(branch, filepath):
     current_branch, branch_list = getCurrentBranch(lst=True)
     if branch not in branch_list:
         print(f'Branch `{branch}` not found.')
-        option = [f'Make new branch `{branch}`', f'Stay on current branch `{current_branch}`']
-        answer = getAnswer(option)
+        answer = getAnswer([f'Make new branch `{branch}`',\
+                            f'Stay on current branch `{current_branch}`'])
         if answer == 1:
             issues.EXECUTE(f'git checkout -b {branch}', run=True)
         else:
             print(f'commiting branch set to {current_branch}')
             branch = current_branch
     else:
-        print(f'Currently on branch `{current_branch}`', end=' ')
-        print(f'but commiting branch is set to `{branch}`.')
-        selection = [f'Merge branch `{current_branch}` -> `{branch}`', \
-                     f'Stay on branch `{current_branch}`']
-        answer = getAnswer(selection)
+        print(f'Currently on branch `{current_branch}` \
+                but commiting branch is set to `{branch}`.')
+        answer = getAnswer([f'Merge branch `{current_branch}` -> `{branch}`', \
+                            f'Stay on branch `{current_branch}`'])
         if answer == 1:
             setCheckout(branch, current_branch, filepath)
             issues.EXECUTE(f'git merge {current_branch}', run=True)
