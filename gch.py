@@ -14,6 +14,10 @@ exp_fe = 'Fetch or not. Flag.       => Default: False'
 exp_de = 'Detailed diff. Flag.     => Default: False'
 
 import os, sys, subprocess as sp
+try:
+    import click
+except ImportError:
+    print('execute `pip install -r requirements.txt`')
 
 # Print w/ color and run shell commands in EXECUTE
 class issues:
@@ -27,27 +31,6 @@ class issues:
         print(f'\033[94m>> EXECUTE: {command}\033[0m')
         if run == True:
             sp.call(command, shell=True)
-
-# try import click, install if fail
-try:
-    import click
-except ImportError:
-    answer = input('package `click` needs to be installed...install? [y/N]:')
-    while(1):
-        if answer=='y':
-            pythonver = sp.getoutput(f'python --version ')
-            if pythonver.find('Anaconda') > 0:
-                issues.EXECUTE('conda install click', run=True)
-            else:
-                issues.EXECUTE('pip install click', run=True)
-            import click
-            break;
-        elif answer == 'N':
-            print('Aborting process...')
-            sys.exit()
-        else:
-            issues.WARNING()
-            answer = input('Please choose y or N: ')
 
 # Generates selection list and answering sequence
 def getAnswer(lst):

@@ -8,6 +8,11 @@ import subprocess as sp
 import time
 from datetime import datetime
 
+try:
+    import click
+except ImportError:
+    print('execute `pip install -r requirements.txt`')
+
 class issues:
     def TIME():
         print(f'\033[93m{str(datetime.now())[:-7]}\033[0m', end=' ')
@@ -17,27 +22,6 @@ class issues:
         print(f'\033[94m>> EXECUTE: \033[0m\033[91m{command}\033[0m\n')
         if run == True:
             sp.call(command, shell=True)
-
-# try import click, install if fail
-try:
-    import click
-except ImportError:
-    answer = input('package `click` needs to be installed...install? [y/N]:')
-    while(1):
-        if answer=='y':
-            pythonver = sp.getoutput(f'python --version ')
-            if pythonver.find('Anaconda') > 0:
-                issues.EXECUTE('conda install click', run=True)
-            else:
-                issues.EXECUTE('pip install click', run=True)
-            import click
-            break;
-        elif answer == 'N':
-            print('Aborting process...')
-            sys.exit()
-        else:
-            issues.WARNING()
-            answer = input('Please choose y or N: ')
 
 def strdth(digit):
     digit = str(digit)
