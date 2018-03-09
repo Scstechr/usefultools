@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+"""
+==================
+Git Commit Handler
+==================
+"""
 
 # Explanation of the options showed in --help flag
 exp_gp = 'Path of .git folder.     => Default: .'
@@ -22,7 +27,7 @@ class issues:
         if run == True:
             sp.call(command, shell=True)
 
-# Import Click
+# try import click, install if fail
 try:
     import click
 except ImportError:
@@ -65,17 +70,18 @@ def getAnswer(lst):
             print('Please choose right answer from below:')
     return answer
 
-
 def Commit(detail):
     ''' Commit '''
     if detail:
-        issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
+        issues.EXECUTE(f'git diff --cached\
+                         --ignore-all-space --ignore-blank-lines', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
 def isStatusClean():
     ''' Checks for any modified/new/deleted files since last commit '''
-    status_list = [status for status in sp.getoutput(f'git status').split('\n') if status[0:1] =='\t']
+    status_list = [status for status in sp.getoutput(f'git status').split('\n')\
+                                                         if status[0:1] =='\t']
     status = True if len(status_list) == 0 else False
     return status
 
@@ -108,7 +114,7 @@ def setCheckout(branch, current_branch, filepath, detail):
         else:
             issues.EXECUTE(f'git checkout -f {branch}', run=True)
 
-def setBranch(branch, filepath):
+def setBranch(branch, filepath, detail):
     current_branch, branch_list = getCurrentBranch(lst=True)
     if branch not in branch_list:
         print(f'Branch `{branch}` not found.')
@@ -120,16 +126,18 @@ def setBranch(branch, filepath):
             print(f'commiting branch set to {current_branch}')
             branch = current_branch
     else:
-        print(f'Currently on branch `{current_branch}` \
-                but commiting branch is set to `{branch}`.')
+        print(f'Currently on branch `{current_branch}` but commiting branch is set to `{branch}`.')
         answer = getAnswer([f'Merge branch `{current_branch}` -> `{branch}`', \
-                            f'Stay on branch `{current_branch}`'])
+                            f'Stay on branch `{current_branch}`',\
+                            f'Checkout to branch `{branch}`'])
         if answer == 1:
-            setCheckout(branch, current_branch, filepath)
+            setCheckout(branch, current_branch, filepath, detail)
             issues.EXECUTE(f'git merge {current_branch}', run=True)
-        else:
+        elif answer == 2:
             print(f'commiting branch set to {current_branch}')
             branch = current_branch
+        else:
+            pass
     return branch
 
 def isGitExist(gitpath):
@@ -147,8 +155,9 @@ def isExist(command):
 @click.option('--filepath', default='.', type=click.Path(exists=True), help=exp_fp)
 @click.option('--branch', default='master', type=str, help=exp_br)
 @click.option('--push', is_flag='False', help=exp_pu)
+@click.option('--fetch', is_flag='False', help=exp_pu)
 @click.option('--detail', is_flag='False', help=exp_de)
-def cmd(gitpath, filepath, branch, push, detail):
+def cmd(gitpath, filepath, branch, push, detail, fetch):
 
     #conversion to absolute path
     gitpath = os.path.abspath(gitpath)
@@ -162,14 +171,14 @@ def cmd(gitpath, filepath, branch, push, detail):
         answer = getAnswer([f'Initialize `.git` folder'])
         issues.EXECUTE('git init', run=True)
 
-    if isExist('git remove -v'):
+    if isExist('git remove -v') and fetch:
         issues.EXECUTE(f'git fetch origin', run=True)
 
     if isExist('git branch'):
         current_branch = getCurrentBranch()
         if current_branch != branch:
             issues.BRANCH()
-            branch = setBranch(branch, filepath)
+            branch = setBranch(branch, filepath, detail)
         
     # Commit or not
     if not isStatusClean():
