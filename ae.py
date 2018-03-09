@@ -14,7 +14,7 @@ class issues:
     def WARNING():
         print(f'\n\033[91m>> WARNING!\033[0m')
     def EXECUTE(command, run=False):
-        print(f'\033[94m>> EXECUTE: \033[0m\033[91m{command}\033[0m')
+        print(f'\033[94m>> EXECUTE: \033[0m\033[91m{command}\033[0m\n')
         if run == True:
             sp.call(command, shell=True)
 
@@ -60,7 +60,7 @@ def cmmd(execute, sleep, rep):
         issues.WARNING()
         sys.exit()
     while(1):
-        print(f'{strdth(i)}', end=' ')
+        print(f'\n{strdth(i)}', end=' ')
         issues.TIME()
         issues.EXECUTE(f'{execute}', run=True)
         if rep > 0 and i >= rep:
