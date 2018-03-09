@@ -10,6 +10,7 @@ exp_gp = 'Path of .git folder.     => Default: .'
 exp_fp = 'Path of staging file(s). => Default: .'
 exp_br = 'Commiting branch.        => Default: master'
 exp_pu = 'Push or not. Flag.       => Default: False'
+exp_fe = 'Fetch or not. Flag.       => Default: False'
 exp_de = 'Detailed diff. Flag.     => Default: False'
 
 import os, sys, subprocess as sp
@@ -155,7 +156,7 @@ def isExist(command):
 @click.option('--filepath', default='.', type=click.Path(exists=True), help=exp_fp)
 @click.option('--branch', default='master', type=str, help=exp_br)
 @click.option('--push', is_flag='False', help=exp_pu)
-@click.option('--fetch', is_flag='False', help=exp_pu)
+@click.option('--fetch', is_flag='False', help=exp_fe)
 @click.option('--detail', is_flag='False', help=exp_de)
 def cmd(gitpath, filepath, branch, push, detail, fetch):
 
