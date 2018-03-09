@@ -19,7 +19,7 @@ Some tools are still __unstable__, so please use it at your own risk.
 
 #### Git Commit Handler
 ```bash
-$ gch --help
+$ ./gch.py --help
  ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐
  ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘
  ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─
@@ -40,7 +40,7 @@ Options:
 
 #### Auto-Executor
 ```bash
-$ ae --help
+$ ./ae.py --help
 Usage: ae.py [OPTIONS] EXECUTE SLEEP
 
 Options:
@@ -51,7 +51,7 @@ Options:
 - Able to set number of repetition.
 
 ```bash
-$ ae 'ls' 2
+$ ./ae.py 'ls' 2
 
 1st 2018-03-09 22:50:49 >> EXECUTE: ls
 
