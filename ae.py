@@ -53,7 +53,7 @@ def strdth(digit):
 @click.command()
 @click.argument('execute', type=str)
 @click.argument('sleep', type=int)
-@click.option('--rep', '-r', type=int, default=0)
+@click.option('--rep', '-r', type=int, default=0, help='Maximum Repetition. Default set to Infinit.')
 def cmmd(execute, sleep, rep):
     i = 1
     if rep < 0 or sleep < 0:
