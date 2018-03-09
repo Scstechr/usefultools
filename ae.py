@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-==================
+=============
 Auto Executor
-==================
+=============
 """
 import subprocess as sp
 import time
