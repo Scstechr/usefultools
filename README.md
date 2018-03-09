@@ -9,7 +9,6 @@ pip install -r requirements.txt
 Also, be sure you have `Python 3.6.x` executable in any way.
 
 ### List of tools
-Some tools are still __unstable__, so please use it at your own risk.
 
 | name | filename | description |
 |:-----|:---------|:------------|
