@@ -49,8 +49,7 @@ def getAnswer(lst):
 def Commit(detail):
     ''' Commit '''
     if detail:
-        issues.EXECUTE(f'git diff --cached\
-                         --ignore-all-space --ignore-blank-lines', run=True)
+        issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
