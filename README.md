@@ -29,7 +29,6 @@ Options:
   --filepath PATH  Path of staging file(s). => Default: .
   --branch TEXT    Commiting branch.        => Default: master
   --push           Push or not. Flag.       => Default: False
-  --fetch          Fetch or not. Flag.       => Default: False
   --detail         Detailed diff. Flag.     => Default: False
   --help           Show this message and exit.
 ```
