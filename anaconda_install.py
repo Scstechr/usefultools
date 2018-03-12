@@ -6,7 +6,7 @@ if sys.version.find('Anaconda') < 0:
     answer = raw_input("Install Anaconda (Miniconda)?[y/N] ")
     if answer == 'y':
         sp.call('brew install Caskroom/cask/miniconda', shell=True)
-        sp.call('echo export PATH="/usr/local/miniconda3/bin:$PATH" >> .bash_profile', shell=True)
+        sp.call('echo export PATH="/usr/local/miniconda3/bin:$PATH" >> ~/.bash_profile', shell=True)
         sp.call('source ~/.bash_profile', shell=True)
     else:
         sp.call("echo 'Aborting Process'", shell=True)
