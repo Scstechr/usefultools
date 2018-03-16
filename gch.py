@@ -153,6 +153,8 @@ def cmd(gitpath, filepath, branch, push, detail, log, commit):
         answer = getAnswer([f'Initialize `.git` folder'])
         issues.EXECUTE('git init', run=True)
 
+    issues.EXECUTE('git status --short', run=True)
+
     if log:
         issues.EXECUTE('git log --stat --oneline --graph --decorate', run=True)
         sys.exit()
