@@ -53,9 +53,8 @@ def Commit():
 
 def isStatusClean():
     ''' Checks for any modified/new/deleted files since last commit '''
-    status_list = [status for status in sp.getoutput(f'git status').split('\n')\
-                                                         if status[0:1] =='\t']
-    status = True if len(status_list) == 0 else False
+    stat = sp.getoutput(f'git status --short').split('\n')
+    status = True if len(stat) == 0 else False
     return status
 
 def getCurrentBranch(lst=False):
