@@ -126,12 +126,12 @@ def isExist(command):
     return flag
 
 # Explanation of the options showed in --help flag
-exp_gp = 'Path of .git folder.     => Default: .'
-exp_fp = 'Path of staging file(s). => Default: .'
-exp_br = 'Commiting branch.        => Default: master'
-exp_pu = 'Push or not. Flag.       => Default: False'
-exp_de = 'Detailed diff. Flag.     => Default: False'
-exp_lo = 'Git log with option.     => Default: False'
+exp_gp = 'Path of .git folder.        => Default: .'
+exp_fp = 'Path of staging file(s).    => Default: .'
+exp_br = 'Commiting branch.           => Default: master'
+exp_pu = 'Push or not. Flag.          => Default: False'
+exp_de = 'Detailed diff. Flag.        => Default: False'
+exp_lo = 'Git log with option.        => Default: False'
 
 @click.command()
 @click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
