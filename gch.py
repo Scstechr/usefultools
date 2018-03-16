@@ -146,15 +146,16 @@ def cmd(gitpath, filepath, branch, push, detail, log, commit):
     filepath = os.path.abspath(filepath)
 
     os.chdir(gitpath)
-    if log:
-        issues.EXECUTE('git log --stat --oneline --graph --decorate', run=True)
-        sys.exit()
 
     if not isGitExist(gitpath):
         issues.WARNING()
         print(f'It seems path:`{gitpath}` does not have `.git` folder')
         answer = getAnswer([f'Initialize `.git` folder'])
         issues.EXECUTE('git init', run=True)
+
+    if log:
+        issues.EXECUTE('git log --stat --oneline --graph --decorate', run=True)
+        sys.exit()
 
     if isExist('git branch'):
         current_branch = getCurrentBranch()
