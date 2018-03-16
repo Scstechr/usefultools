@@ -46,10 +46,8 @@ def getAnswer(lst):
             print('Please choose right answer from below:')
     return answer
 
-def Commit(detail):
+def Commit():
     ''' Commit '''
-    if detail:
-        issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
 
@@ -126,21 +124,23 @@ def isExist(command):
     return flag
 
 # Explanation of the options showed in --help flag
-exp_gp = 'Path of .git folder.        => Default: .'
-exp_fp = 'Path of staging file(s).    => Default: .'
-exp_br = 'Commiting branch.           => Default: master'
-exp_pu = 'Push or not. Flag.          => Default: False'
-exp_de = 'Detailed diff. Flag.        => Default: False'
-exp_lo = 'Git log with option.        => Default: False'
+exp_g = 'Path of .git folder.        => Default: .'
+exp_f = 'Path of staging file(s).    => Default: .'
+exp_b = 'Commiting branch.           => Default: master'
+exp_p = 'Push or not. Flag.          => Default: False'
+exp_d = 'Detailed diff. Flag.        => Default: False'
+exp_l = 'Git log with option.        => Default: False'
+exp_c = 'Commit or not.              => Default: False'
 
 @click.command()
-@click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
-@click.option('-f', '--filepath', default='.', type=click.Path(exists=True), help=exp_fp)
-@click.option('-b', '--branch', default='master', type=str, help=exp_br)
-@click.option('-p', '--push', is_flag='False', help=exp_pu)
-@click.option('-d', '--detail', is_flag='False', help=exp_de)
-@click.option('-l', '--log', is_flag='False', help=exp_lo)
-def cmd(gitpath, filepath, branch, push, detail, log):
+@click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_g)
+@click.option('-f', '--filepath', default='.', type=click.Path(exists=True), help=exp_f)
+@click.option('-b', '--branch', default='master', type=str, help=exp_b)
+@click.option('-p', '--push', is_flag='False', help=exp_p)
+@click.option('-d', '--detail', is_flag='False', help=exp_d)
+@click.option('-l', '--log', is_flag='False', help=exp_l)
+@click.option('-c', '--commit', is_flag='False', help=exp_c)
+def cmd(gitpath, filepath, branch, push, detail, log, commit):
 
     #conversion to absolute path
     gitpath = os.path.abspath(gitpath)
@@ -167,7 +167,10 @@ def cmd(gitpath, filepath, branch, push, detail, log):
     if not isStatusClean():
         issues.EXECUTE(f'git diff --stat', run=True)
         issues.EXECUTE(f'git add {filepath}', run=True)
-        Commit(detail)
+        if detail:
+            issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
+        if commit:
+            Commit()
     else:
         print('Clean State')
 
