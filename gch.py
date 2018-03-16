@@ -131,6 +131,7 @@ exp_fp = 'Path of staging file(s). => Default: .'
 exp_br = 'Commiting branch.        => Default: master'
 exp_pu = 'Push or not. Flag.       => Default: False'
 exp_de = 'Detailed diff. Flag.     => Default: False'
+exp_lo = 'Git log with option.     => Default: False'
 
 @click.command()
 @click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_gp)
@@ -138,13 +139,17 @@ exp_de = 'Detailed diff. Flag.     => Default: False'
 @click.option('-b', '--branch', default='master', type=str, help=exp_br)
 @click.option('-p', '--push', is_flag='False', help=exp_pu)
 @click.option('-d', '--detail', is_flag='False', help=exp_de)
-def cmd(gitpath, filepath, branch, push, detail):
+@click.option('-l', '--log', is_flag='False', help=exp_lo)
+def cmd(gitpath, filepath, branch, push, detail, log):
 
     #conversion to absolute path
     gitpath = os.path.abspath(gitpath)
     filepath = os.path.abspath(filepath)
 
     os.chdir(gitpath)
+    if log:
+        issues.EXECUTE('git log --stat --oneline --graph --decorate', run=True)
+        sys.exit()
 
     if not isGitExist(gitpath):
         issues.WARNING()
