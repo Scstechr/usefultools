@@ -78,7 +78,7 @@ def setCheckout(branch, current_branch, filepath, detail):
                               f'Force Checkout to `{branch}`', ])
         if answer_2 == 1:
             issues.EXECUTE(f'git add {filepath}', run=True)
-            Commit(detail)
+            Commit()
             issues.EXECUTE(f'git checkout {branch}', run=True)
         elif answer_2 == 2:
             issues.EXECUTE(f'git stash', run=True)
