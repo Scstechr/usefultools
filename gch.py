@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-"""
+'''
 ==================
 Git Commit Handler
 ==================
-"""
+'''
 
 import sys, subprocess as sp
 from os import path, chdir
@@ -12,40 +12,43 @@ try:
 except ImportError:
     print('execute `pip install -r requirements.txt`')
 
-# Print w/ color and run shell commands in EXECUTE
 class issues:
+    ''' String Format with color change '''
     def BRANCH():
         print(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
     def ABORT():
         print(f'\n\033[91m>> ABORT!\033[0m')
     def WARNING(string=None):
-        print(f'\n\033[91m>> WARNING!\033[0m\n{string}')
-    def EXECUTE(command, run=False):
-        print(f'\033[94m>> EXECUTE: {command}\033[0m')
-        if run == True:
-            sp.call(command, shell=True)
+        print(f'\n\033[91m>> WARNING!: {string}\033[0m')
+    def EXECUTE(command_list, run=True):
+        ''' Execute bash commands through shell '''
+        for command in command_list:
+            print(f'\033[94m>> EXECUTE: {command}\033[0m')
+            if run == True:
+                sp.call(command, shell=True)
 
-# Generates selection list and answering sequence
+def b(string):
+    ''' String Format for Branch Name '''
+    return f'\033[3m\033[33m{string}\033[0m'
+
 def getAnswer(lst):
+    ''' Generates selection list and answering sequence '''
     while(1):
         [print(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
         answer = input('Answer: ')
         if answer.isdigit():
             if int(answer) > 0 and int(answer) <= len(lst):
                 break
-            else:
-                issues.WARNING('Please choose right answer from below:')
-        else:
-            issues.WARNING('Please choose right answer from below:')
+        issues.WARNING('Please choose right answer from below:')
     return int(answer)
 
 def Commit():
     ''' Commit '''
     commit_message = input('Commit Message: ')
-    issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
+    issues.EXECUTE([f'git commit -m "{commit_message}"'])
 
 def getCurrentBranch(lst=False):
-    ''' Returns current branch name '''
+    ''' Returns current branch name w or w/o branch list '''
     l = sp.getoutput('git branch').split('\n')
     current_branch = ''.join(branch[2:] for branch in l if branch[0]=='*')
     branch_list = [branch[2:] for branch in l]
@@ -54,58 +57,49 @@ def getCurrentBranch(lst=False):
     else:
         return current_branch
 
-def setCheckout(branch, current_branch, filepath):
-    ''' Handles Checkout Matters '''
-    if not isExist(f'git status --short'):
-        issues.EXECUTE(f'git checkout {branch}', run=True)
-    else:
-        print(f'Theres some changes in {current_branch}')
-        qs =     [f'Commit changes of `{current_branch}`']
-        qs.append(f'Stash changes of `{current_branch}`')
-        qs.append(f'Force Checkout to `{branch}`')
-        answer = getAnswer(qs)
-        if answer == 1:
-            issues.EXECUTE(f'git add {filepath}', run=True)
-            issues.EXECUTE(f'git diff --stat', run=True)
-            Commit()
-            issues.EXECUTE(f'git checkout {branch}', run=True)
-        elif answer == 2:
-            issues.EXECUTE(f'git stash', run=True)
-            issues.EXECUTE(f'git checkout {branch}', run=True)
-        else:
-            issues.EXECUTE(f'git checkout -f {branch}', run=True)
-
 def setBranch(branch, filepath):
     current_branch, branch_list = getCurrentBranch(lst=True)
     if branch not in branch_list:
-        print(f'Branch `{branch}` not found.')
-        answer = getAnswer([f'Make new branch `{branch}`',\
-                            f'Stay on current branch `{current_branch}`'])
-        if answer == 1:
-            issues.EXECUTE(f'git checkout -b {branch}', run=True)
-        else:
-            print(f'commiting branch set to {current_branch}')
-            branch = current_branch
-    else:
-        print(f'Currently on `{current_branch}` but tried to commit to `{branch}`.')
-        qs =     [f'Merge `{current_branch}` => `{branch}`']
-        qs.append(f'Stay on `{current_branch}`')
-        qs.append(f'Checkout to `{branch}`')
+        print(f'Branch `{b(branch)}` not found.')
+        qs =     [f'Make new branch `{b(branch)}`               ']
+        qs.append(f'Stay on current branch `{b(current_branch)}`')
         answer = getAnswer(qs)
         if answer == 1:
-            setCheckout(branch, current_branch, filepath)
-            issues.EXECUTE(f'git merge {current_branch}', run=True)
-        elif answer == 2:
-            print(f'commiting branch set to {current_branch}')
+            issues.EXECUTE([f'git checkout -b {branch}'])
+        else:
+            print(f'Commiting branch set to {b(current_branch)}')
+            branch = current_branch
+    else:
+        text = f'Currently on branch `{b(current_branch)}` but tried to commit to branch `{b(branch)}`.'
+        print(text)
+        qs =     [f'Merge branch `{b(current_branch)}` => branch `{b(branch)}`']
+        qs.append(f'Stay on branch `{b(current_branch)}`                   ')
+        qs.append(f'Checkout to branch `{b(branch)}`                       ')
+        answer = getAnswer(qs)
+        if answer == 2:
+            print(f'Commiting branch is now set to `{b(current_branch)}`')
             branch = current_branch
         else:
-            setCheckout(branch, current_branch, filepath)
+            if not isExist(f'git status --short'):
+                issues.EXECUTE([f'git checkout {branch}'])
+            else:
+                print(f'\nTheres some changes in branch `{b(current_branch)}`.')
+                issues.EXECUTE([f'git diff --stat'])
+                qs =     [f'Commit changes of branch `{b(current_branch)}`']
+                qs.append(f'Stash changes of branch `{b(current_branch)}` ')
+                qs.append(f'Force Checkout to branch `{b(branch)}`        ')
+                answer_2 = getAnswer(qs)
+                if answer_2 == 1:
+                    issues.EXECUTE([f'git add .',f'git diff --stat'])
+                    Commit()
+                    issues.EXECUTE([f'git checkout {branch}'])
+                elif answer_2 == 2:
+                    issues.EXECUTE([f'git stash',f'git checkout {branch}'])
+                else:
+                    issues.EXECUTE([f'git checkout -f {branch}'])
+            if answer == 1:
+                issues.EXECUTE([f'git merge {current_branch}'])
     return branch
-
-def isGitExist(gitpath):
-    gitfolder = path.join(gitpath, '.git')
-    flag = True if path.exists(gitfolder) else False
-    return flag
 
 def isExist(command):
     output = sp.getoutput(command)
@@ -137,17 +131,16 @@ def main(gitpath, filepath, branch, push, detail, log, commit):
 
     chdir(gitpath)
 
-    if not isGitExist(gitpath):
-        issues.WARNING()
-        print(f'It seems path:`{gitpath}` does not have `.git` folder')
-        answer = getAnswer([f'Initialize `.git` folder'])
-        issues.EXECUTE('git init', run=True)
+    gitfolder = path.join(gitpath, '.git')
+    if not path.exists(gitfolder):
+        issues.WARNING(f'It seems path:`{gitpath}` does not have `.git` folder.')
+        answer = input(f'Initialize `.git` folder[y/N]: ')
+        issues.EXECUTE(['git init']) if answer == 'y' else issues.ABORT()
 
-    issues.EXECUTE('git status --short', run=True)
+    issues.EXECUTE(['git status --short'])
 
     if log:
-        issues.EXECUTE('git log --stat --oneline --graph --decorate', run=True)
-        sys.exit()
+        issues.EXECUTE(['git log --stat --oneline --graph --decorate'])
 
     if isExist('git branch'):
         current_branch = getCurrentBranch()
@@ -157,12 +150,11 @@ def main(gitpath, filepath, branch, push, detail, log, commit):
         
     # Commit or not
     if isExist(f'git status --short'):
-        issues.EXECUTE(f'git diff --stat', run=True)
-        issues.EXECUTE(f'git add -n {filepath}', run=True)
+        issues.EXECUTE([f'git diff --stat'])
         if detail:
-            issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
+            issues.EXECUTE([f'git diff --cached --ignore-all-space --ignore-blank-lines'])
         if commit:
-            issues.EXECUTE(f'git add {filepath}', run=True)
+            issues.EXECUTE([f'git add {filepath}'])
             Commit()
     else:
         print('Clean State')
@@ -173,7 +165,7 @@ def main(gitpath, filepath, branch, push, detail, log, commit):
     elif not isExist(f'git remote -v'):
         print('** no remote repository **')
     else:
-        issues.EXECUTE(f'git push -u origin {branch}', run=True)
+        issues.EXECUTE([f'git push -u origin {branch}'])
 
 
 if __name__ == "__main__":
