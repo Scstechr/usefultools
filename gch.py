@@ -18,8 +18,8 @@ class issues:
         print(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
     def ABORT():
         print(f'\n\033[91m>> ABORT!\033[0m')
-    def WARNING():
-        print(f'\n\033[91m>> WARNING!\033[0m')
+    def WARNING(string=None):
+        print(f'\n\033[91m>> WARNING!\033[0m\n{string}')
     def EXECUTE(command, run=False):
         print(f'\033[94m>> EXECUTE: {command}\033[0m')
         if run == True:
@@ -27,36 +27,22 @@ class issues:
 
 # Generates selection list and answering sequence
 def getAnswer(lst):
-    # Adds Abort as a option
-    lst.append('Abort')
     while(1):
         [print(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
         answer = input('Answer: ')
         if answer.isdigit():
-            answer = int(answer)
-            if answer > 0 and answer < len(lst):
-                break;
-            elif answer == len(lst):
-                issues.ABORT()
-                sys.exit(0)
+            if int(answer) > 0 and int(answer) <= len(lst):
+                break
             else:
-                issues.WARNING()
-                print('Please choose right answer from below:')
+                issues.WARNING('Please choose right answer from below:')
         else:
-            issues.WARNING()
-            print('Please choose right answer from below:')
-    return answer
+            issues.WARNING('Please choose right answer from below:')
+    return int(answer)
 
 def Commit():
     ''' Commit '''
     commit_message = input('Commit Message: ')
     issues.EXECUTE(f'git commit -m "{commit_message}"', run=True)
-
-def isStatusClean():
-    ''' Checks for any modified/new/deleted files since last commit '''
-    stat = sp.getoutput(f'git status --short')
-    status = True if len(stat) == 0 else False
-    return status
 
 def getCurrentBranch(lst=False):
     ''' Returns current branch name '''
@@ -68,26 +54,27 @@ def getCurrentBranch(lst=False):
     else:
         return current_branch
 
-def setCheckout(branch, current_branch, filepath, detail):
+def setCheckout(branch, current_branch, filepath):
     ''' Handles Checkout Matters '''
     if not isExist(f'git status --short'):
         issues.EXECUTE(f'git checkout {branch}', run=True)
     else:
         print(f'Theres some changes in {current_branch}')
-        answer_2 = getAnswer([f'Commit changes of `{current_branch}`', \
-                              f'Stash changes of `{current_branch}`', \
-                              f'Force Checkout to `{branch}`', ])
-        if answer_2 == 1:
+        qs =     [f'Commit changes of `{current_branch}`']
+        qs.append(f'Stash changes of `{current_branch}`')
+        qs.append(f'Force Checkout to `{branch}`')
+        answer = getAnswer(qs)
+        if answer == 1:
             issues.EXECUTE(f'git add {filepath}', run=True)
             Commit()
             issues.EXECUTE(f'git checkout {branch}', run=True)
-        elif answer_2 == 2:
+        elif answer == 2:
             issues.EXECUTE(f'git stash', run=True)
             issues.EXECUTE(f'git checkout {branch}', run=True)
         else:
             issues.EXECUTE(f'git checkout -f {branch}', run=True)
 
-def setBranch(branch, filepath, detail):
+def setBranch(branch, filepath):
     current_branch, branch_list = getCurrentBranch(lst=True)
     if branch not in branch_list:
         print(f'Branch `{branch}` not found.')
@@ -99,18 +86,19 @@ def setBranch(branch, filepath, detail):
             print(f'commiting branch set to {current_branch}')
             branch = current_branch
     else:
-        print(f'Currently on branch `{current_branch}` but commiting branch is set to `{branch}`.')
-        answer = getAnswer([f'Merge branch `{current_branch}` -> `{branch}`', \
-                            f'Stay on branch `{current_branch}`',\
-                            f'Checkout to branch `{branch}`'])
+        print(f'Currently on `{current_branch}` but tried to commit to `{branch}`.')
+        qs =     [f'Merge `{current_branch}` => `{branch}`']
+        qs.append(f'Stay on `{current_branch}`')
+        qs.append(f'Checkout to `{branch}`')
+        answer = getAnswer(qs)
         if answer == 1:
-            setCheckout(branch, current_branch, filepath, detail)
+            setCheckout(branch, current_branch, filepath)
             issues.EXECUTE(f'git merge {current_branch}', run=True)
         elif answer == 2:
             print(f'commiting branch set to {current_branch}')
             branch = current_branch
         else:
-            pass
+            setCheckout(branch, current_branch, filepath)
     return branch
 
 def isGitExist(gitpath):
@@ -164,7 +152,7 @@ def main(gitpath, filepath, branch, push, detail, log, commit):
         current_branch = getCurrentBranch()
         if current_branch != branch:
             issues.BRANCH()
-            branch = setBranch(branch, filepath, detail)
+            branch = setBranch(branch, filepath)
         
     # Commit or not
     if isExist(f'git status --short'):
