@@ -139,7 +139,7 @@ exp_c = 'Commit or not.              => Default: False'
 @click.option('-d', '--detail', is_flag='False', help=exp_d)
 @click.option('-l', '--log', is_flag='False', help=exp_l)
 @click.option('-c', '--commit', is_flag='False', help=exp_c)
-def cmd(gitpath, filepath, branch, push, detail, log, commit):
+def main(gitpath, filepath, branch, push, detail, log, commit):
 
     #conversion to absolute path
     gitpath = os.path.abspath(gitpath)
@@ -168,10 +168,11 @@ def cmd(gitpath, filepath, branch, push, detail, log, commit):
     # Commit or not
     if not isStatusClean():
         issues.EXECUTE(f'git diff --stat', run=True)
-        issues.EXECUTE(f'git add {filepath}', run=True)
+        issues.EXECUTE(f'git add -n {filepath}', run=True)
         if detail:
             issues.EXECUTE(f'git diff --cached --ignore-all-space --ignore-blank-lines', run=True)
         if commit:
+            issues.EXECUTE(f'git add {filepath}', run=True)
             Commit()
     else:
         print('Clean State')
@@ -183,16 +184,6 @@ def cmd(gitpath, filepath, branch, push, detail, log, commit):
         print('** no remote repository **')
     else:
         issues.EXECUTE(f'git push -u origin {branch}', run=True)
-
-
-def main():
-    # Title string 
-    title =    ' ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐'
-    title += '\n ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘'
-    title += '\n ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─'
-
-    print(title)
-    cmd()
 
 
 if __name__ == "__main__":
