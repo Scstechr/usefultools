@@ -5,7 +5,8 @@ Git Commit Handler
 ==================
 """
 
-import os, sys, subprocess as sp
+import sys, subprocess as sp
+from os import path, chdir
 try:
     import click
 except ImportError:
@@ -53,7 +54,7 @@ def Commit():
 
 def isStatusClean():
     ''' Checks for any modified/new/deleted files since last commit '''
-    stat = sp.getoutput(f'git status --short').split('\n')
+    stat = sp.getoutput(f'git status --short')
     status = True if len(stat) == 0 else False
     return status
 
@@ -69,7 +70,7 @@ def getCurrentBranch(lst=False):
 
 def setCheckout(branch, current_branch, filepath, detail):
     ''' Handles Checkout Matters '''
-    if isStatusClean():
+    if not isExist(f'git status --short'):
         issues.EXECUTE(f'git checkout {branch}', run=True)
     else:
         print(f'Theres some changes in {current_branch}')
@@ -113,8 +114,8 @@ def setBranch(branch, filepath, detail):
     return branch
 
 def isGitExist(gitpath):
-    gitfolder = os.path.join(gitpath, '.git')
-    flag = True if os.path.exists(gitfolder) else False
+    gitfolder = path.join(gitpath, '.git')
+    flag = True if path.exists(gitfolder) else False
     return flag
 
 def isExist(command):
@@ -142,10 +143,10 @@ exp_c = 'Commit or not.              => Default: False'
 def main(gitpath, filepath, branch, push, detail, log, commit):
 
     #conversion to absolute path
-    gitpath = os.path.abspath(gitpath)
-    filepath = os.path.abspath(filepath)
+    gitpath = path.abspath(gitpath)
+    filepath = path.abspath(filepath)
 
-    os.chdir(gitpath)
+    chdir(gitpath)
 
     if not isGitExist(gitpath):
         issues.WARNING()
@@ -166,7 +167,7 @@ def main(gitpath, filepath, branch, push, detail, log, commit):
             branch = setBranch(branch, filepath, detail)
         
     # Commit or not
-    if not isStatusClean():
+    if isExist(f'git status --short'):
         issues.EXECUTE(f'git diff --stat', run=True)
         issues.EXECUTE(f'git add -n {filepath}', run=True)
         if detail:
