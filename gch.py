@@ -66,6 +66,7 @@ def setCheckout(branch, current_branch, filepath):
         answer = getAnswer(qs)
         if answer == 1:
             issues.EXECUTE(f'git add {filepath}', run=True)
+            issues.EXECUTE(f'git diff --stat', run=True)
             Commit()
             issues.EXECUTE(f'git checkout {branch}', run=True)
         elif answer == 2:
