@@ -18,23 +18,24 @@ Also, be sure you have `Python 3.6.x` executable in any way.
 
 #### Git Commit Handler
 ```bash
-$ ./gch.py --help
- ╔═╗┬┌┬┐  ╔═╗┌─┐┌┬┐┌┬┐┬┌┬┐  ╦ ╦┌─┐┌┐┌┌┬┐┬  ┌─┐┬─┐
- ║ ╦│ │   ║  │ ││││││││ │   ╠═╣├─┤│││ │││  ├┤ ├┬┘
- ╚═╝┴ ┴   ╚═╝└─┘┴ ┴┴ ┴┴ ┴   ╩ ╩┴ ┴┘└┘─┴┘┴─┘└─┘┴└─
+$ gch --help
 Usage: gch.py [OPTIONS]
 
 Options:
-  --gitpath PATH   Path of .git folder.     => Default: .
-  --filepath PATH  Path of staging file(s). => Default: .
-  --branch TEXT    Commiting branch.        => Default: master
-  --push           Push or not. Flag.       => Default: False
-  --detail         Detailed diff. Flag.     => Default: False
-  --help           Show this message and exit.
+  -g, --gitpath PATH   Path of dir that contains `.git`. > Default: .
+  -f, --filepath PATH  Path of staging file/diry.        > Default: .
+  -b, --branch TEXT    Commiting branch.                 > Default: master
+  -p, --push           Push or not.                      > Default: False
+  -d, --detail         Detailed diff.                    > Default: False
+  -l, --log            Git log with option.              > Default: False
+  -c, --commit         Commit or not.                    > Default: False
+  -u, --unstage        Unstage all files.                > Default: False
+  --help               Show this message and exit.
 ```
 - Executes `git` related commands as such:
 	- `git init`, `git commit`, `git diff`, `git add`, `git push`
 - Some issues with `merge` still exists (when conflict happens).
+- Document available: [HERE]
 
 #### Auto-Executor
 ```bash
@@ -81,6 +82,6 @@ alias gch='gch.py'
 alias ae='ae.py'
 alias col='colors.py'
 ```
-	 
+
 
 
