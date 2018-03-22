@@ -108,7 +108,9 @@ def isExist(command):
     return flag
 
 def initialize():
-    pass
+    title = input('Title of this repository(project): ').upper()
+    issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md'])
+    issues.EXECUTE(['echo ".*" >> .gitignore', f'echo "# {title}" >> README.md'])
 
 # Explanation of the options showed in --help flag
 exp_g = 'Path of dir that contains `.git`. > Default: .'
@@ -142,9 +144,7 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
         issues.WARNING(f'It seems path:`{gitpath}` does not have `.git` folder.')
         answer = input(f'Initialize? [y/N]: ')
         if answer == 'y':
-            title = input('Title of this repository(project): ').upper()
-            issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md'])
-            issues.EXECUTE(['echo ".*" >> .gitignore', f'echo "# {title}" >> README.md'])
+            initialize()
         else:
             issues.ABORT()
 
