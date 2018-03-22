@@ -35,13 +35,12 @@ def b(string):
 def getAnswer(lst):
     ''' Generates selection list and answering sequence '''
     while(1):
-        [print(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
-        answer = input('Answer: ')
-        if answer.isdigit():
-            if int(answer) > 0 and int(answer) <= len(lst):
-                break
+        [click.echo(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
+        answer = click.prompt('Answer',type=int)
+        if answer > 0 and answer <= len(lst):
+            break
         issues.WARNING('Please choose right answer from below:')
-    return int(answer)
+    return answer
 
 def Commit():
     ''' Commit '''
@@ -77,13 +76,13 @@ def setBranch(branch, filepath):
         qs.append(f'Checkout to branch `{b(branch)}`                       ')
         answer = getAnswer(qs)
         if answer == 2:
-            print(f'Commiting branch is now set to `{b(current_branch)}`')
+            click.echo(f'Commiting branch is now set to `{b(current_branch)}`')
             branch = current_branch
         else:
             if not isExist(f'git status --short'):
                 issues.EXECUTE([f'git checkout {branch}'])
             else:
-                print(f'\nTheres some changes in branch `{b(current_branch)}`.')
+                click.echo(f'\nTheres some changes in branch `{b(current_branch)}`.')
                 issues.EXECUTE([f'git diff --stat'])
                 qs =     [f'Commit changes of branch `{b(current_branch)}`']
                 qs.append(f'Stash changes of branch `{b(current_branch)}` ')
@@ -120,7 +119,7 @@ def initialize(flag=False):
         click.echo("# using vimdiff as a merge tool")
         issues.EXECUTE([f'git config --global merge.tool vimdiff',\
                          'git config --list'])
-    title = input('Title of this repository(project): ').upper()
+    title = click.prompt('Title of this repository(project)').upper()
     issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md'])
     issues.EXECUTE(['echo ".*" >> .gitignore', f'echo "# {title}" >> README.md'])
 
@@ -190,7 +189,6 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
         print('** no remote repository **')
     else:
         issues.EXECUTE([f'git push -u origin {branch}'])
-
 
 if __name__ == "__main__":
     main()
