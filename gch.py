@@ -7,8 +7,8 @@ Git Commit Handler
 
 import sys, subprocess as sp
 from os import path, chdir
-import platform
-if platform.python_version_tuple()[0] != '3':
+import six
+if not six.PY3:
     sp.call('echo "VERSION ERROR! PLEASE USE PYTHON 3.6.X"', shell=True)
 try:
     import click
