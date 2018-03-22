@@ -118,7 +118,7 @@ def initialize(flag=False):
             issues.EXECUTE([f'git config --global core.editor emacs'])
         click.echo("# using vimdiff as a merge tool")
         issues.EXECUTE([f'git config --global merge.tool vimdiff',\
-                         'git config --list'])
+                         'cat ~/.gitconfig'])
     title = click.prompt('Title of this repository(project)').upper()
     issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md'])
     issues.EXECUTE(['echo ".*" >> .gitignore', f'echo "# {title}" >> README.md'])
