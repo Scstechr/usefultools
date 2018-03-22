@@ -107,6 +107,9 @@ def isExist(command):
     flag = False if len(output) == 0 else True
     return flag
 
+def initialize():
+    pass
+
 # Explanation of the options showed in --help flag
 exp_g = 'Path of dir that contains `.git`. > Default: .'
 exp_f = 'Path of staging file/diry.        > Default: .'
