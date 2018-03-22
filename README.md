@@ -35,7 +35,7 @@ Options:
 - Executes `git` related commands as such:
 	- `git init`, `git commit`, `git diff`, `git add`, `git push`
 - Some issues with `merge` still exists (when conflict happens).
-- Document available: [[HERE](usefultools/doc/gch_doc.md)]
+- Document available: [[HERE](doc/gch_doc.md)]
 
 #### Auto-Executor
 ```bash
