@@ -11,7 +11,7 @@ Every command used in this script is visible as such:
 ##### `-g` or `--gitpath`
 
 The capability of this tag is that of `git --git-dir=<path>`.
-With this tag, user can select which `.git` folder to use for commit etc.
+With this tag, user can specify which `.git` folder to use for commit etc.
 Default is set to `.`, which will be selected if `-g` was abridged.
 
 ##### Example
@@ -35,11 +35,13 @@ If user was in ...
   1. If `-g` was abridged, it selects `Main/test/.git` as a target `.git` folder.
   2. If `-g` was set to `..` i.e. `-g ..`, it selects `Main/.git` as a target `.git` folder.
 
-<!-- ##### `-f` or `--fipath`
+##### `-f` or `--filepath`
 - __Default:__  `.`
 - __Argument (Option):__ `<PATH>`
 
-##### `-b` or `--gitpath`
+If user wants to `git add` only specific file, then please declare it with `-f <FILE>`. Otherwise, `git add .` will be executed by default.
+
+<!-- ##### `-b` or `--gitpath`
 - __Default:__  `.`
 - __Argument (Option):__ `<PATH>`
 
