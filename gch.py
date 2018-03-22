@@ -108,13 +108,14 @@ def isExist(command):
     return flag
 
 # Explanation of the options showed in --help flag
-exp_g = 'Path of .git folder.        => Default: .'
-exp_f = 'Path of staging file(s).    => Default: .'
-exp_b = 'Commiting branch.           => Default: master'
-exp_p = 'Push or not. Flag.          => Default: False'
-exp_d = 'Detailed diff. Flag.        => Default: False'
-exp_l = 'Git log with option.        => Default: False'
-exp_c = 'Commit or not.              => Default: False'
+exp_g = 'Path of dir that contains `.git`. > Default: .'
+exp_f = 'Path of staging file/diry.        > Default: .'
+exp_b = 'Commiting branch.                 > Default: master'
+exp_p = 'Push or not.                      > Default: False'
+exp_d = 'Detailed diff.                    > Default: False'
+exp_l = 'Git log with option.              > Default: False'
+exp_c = 'Commit or not.                    > Default: False'
+exp_u = 'Unstage all files.                > Default: False'
 
 @click.command()
 @click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_g)
@@ -124,7 +125,8 @@ exp_c = 'Commit or not.              => Default: False'
 @click.option('-d', '--detail', is_flag='False', help=exp_d)
 @click.option('-l', '--log', is_flag='False', help=exp_l)
 @click.option('-c', '--commit', is_flag='False', help=exp_c)
-def main(gitpath, filepath, branch, push, detail, log, commit):
+@click.option('-u', '--unstage', is_flag='False', help=exp_u)
+def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
 
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
@@ -135,9 +137,16 @@ def main(gitpath, filepath, branch, push, detail, log, commit):
     gitfolder = path.join(gitpath, '.git')
     if not path.exists(gitfolder):
         issues.WARNING(f'It seems path:`{gitpath}` does not have `.git` folder.')
-        answer = input(f'Initialize `.git` folder[y/N]: ')
-        issues.EXECUTE(['git init']) if answer == 'y' else issues.ABORT()
+        answer = input(f'Initialize? [y/N]: ')
+        if answer == 'y':
+            title = input('Title of this repository(project): ').upper()
+            issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md'])
+            issues.EXECUTE(['echo ".*" >> .gitignore', f'echo "# {title}" >> README.md'])
+        else:
+            issues.ABORT()
 
+    if unstage:
+        issues.EXECUTE(['git rm -r --cached .'])
     issues.EXECUTE(['git status --short'])
 
     if log:
