@@ -1,4 +1,4 @@
-#!/Users/moinaga/anaconda/bin/python
+#!/usr/bin/env python
 import os, sys
 
 if len(sys.argv) == 2:

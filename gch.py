@@ -18,6 +18,7 @@ class issues:
         print(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
     def ABORT():
         print(f'\n\033[91m>> ABORT!\033[0m')
+        sys.exit()
     def WARNING(string=None):
         print(f'\n\033[91m>> WARNING!: {string}\033[0m')
     def EXECUTE(command_list, run=True):
