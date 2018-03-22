@@ -7,24 +7,27 @@ Git Commit Handler
 
 import sys, subprocess as sp
 from os import path, chdir
+import platform
+if platform.python_version_tuple()[0] != '3':
+    sp.call('echo "VERSION ERROR! PLEASE USE PYTHON 3.6.X"', shell=True)
 try:
     import click
 except ImportError:
-    print('execute `pip install -r requirements.txt`')
+    sp.call('echo "execute `pip install -r requirements.txt`"', shell=True)
 
 class issues:
     ''' String Format with color change '''
     def BRANCH():
-        print(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
+        click.echo(f'\n\033[93m>> BRANCH ISSUE!\033[0m')
     def ABORT():
-        print(f'\n\033[91m>> ABORT!\033[0m')
+        click.echo(f'\n\033[91m>> ABORT!\033[0m')
         sys.exit()
     def WARNING(string=None):
-        print(f'\n\033[91m>> WARNING!: {string}\033[0m')
+        click.echo(f'\n\033[91m>> WARNING!: {string}\033[0m')
     def EXECUTE(command_list, run=True):
         ''' Execute bash commands through shell '''
         for command in command_list:
-            print(f'\033[94m>> EXECUTE: {command}\033[0m')
+            click.echo(f'\033[94m>> EXECUTE: {command}\033[0m')
             if run == True:
                 sp.call(command, shell=True)
 
@@ -105,9 +108,9 @@ def isExist(command):
     flag = False if len(output) == 0 else True
     return flag
 
-def initialize(flag=False):
+def initialize():
     # git confi
-    if not path.exists("~/.gitconfig") and flag:
+    if not path.exists("~/.gitconfig"):
         click.echo("~/.gitconfig file does not exist. => Start Initialization!")
         username = click.prompt("username", type=str)
         email = click.prompt("email", type=str)
@@ -154,7 +157,7 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
     if not path.exists(gitfolder):
         issues.WARNING(f'It seems path:`{gitpath}` does not have `.git` folder.')
         if click.confirm(f'Initialize?'):
-            initialize(True)
+            initialize()
         else:
             issues.ABORT()
 
@@ -180,13 +183,13 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
             issues.EXECUTE([f'git add {filepath}'])
             Commit()
     else:
-        print('Clean State')
+        click.echo('Clean State')
 
     # Push or not
     if not push:
-        print('** no push **')
+        click.echo('** no push **')
     elif not isExist(f'git remote -v'):
-        print('** no remote repository **')
+        click.echo('** no remote repository **')
     else:
         issues.EXECUTE([f'git push -u origin {branch}'])
 
