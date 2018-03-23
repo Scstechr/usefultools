@@ -1,5 +1,6 @@
 # GCH: Git Commit Handler
-###### Table of Contesnts
+###### Table of Contents
+
 - [インストール](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#インストール)
 - [オプション](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#オプション)
   - [`-g`/`--gitpath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-g-or---gitpath)
