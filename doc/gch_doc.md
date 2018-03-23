@@ -1,7 +1,7 @@
 # GCH: Git Commit Handler
 ###### Table of Contesnts
-- [Installation](#installation)
-- [Option](#option)
+- [Installation](###installation)
+- [Option](###option)
 
 
 ### Installation
