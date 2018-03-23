@@ -109,6 +109,11 @@ Display `git log` with some options.
 
 `git commit` with commit message.
 
+#### `-u` or `--unstage`
+
+`git rm -r <PATH>` if there are any staged files.
+
+
 <!--##### `-p` or `--gitpath`
 - __Default:__  `.`
 - __Argument (Option):__ `<PATH>`
