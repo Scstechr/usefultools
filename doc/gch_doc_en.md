@@ -3,13 +3,13 @@
 	- [Installation](#installation)
 		- [Update](#update)
 	- [Options](#options)
-		- [`-g` or `--gitpath`](#-g-or-gitpath)
-		- [`-f` or `--filepath`](#-f-or-filepath)
-		- [`-b` or `--branch`](#-b-or-branch)
-		- [`-d` or `--detail`](#-d-or-detail)
-		- [`-l` or `--log`](#-l-or-log)
-		- [`-c` or `--commit`](#-c-or-commit)
-		- [`-u` or `--unstage`](#-u-or-unstage)
+		- [`-g` or `--gitpath`](#-g-or---gitpath)
+		- [`-f` or `--filepath`](#-f-or---filepath)
+		- [`-b` or `--branch`](#-b-or---branch)
+		- [`-d` or `--detail`](#-d-or---detail)
+		- [`-l` or `--log`](#-l-or---log)
+		- [`-c` or `--commit`](#-c-or---commit)
+		- [`-u` or `--unstage`](#-u-or---unstage)
 
 ### Installation
 ```bash
