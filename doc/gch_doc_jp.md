@@ -21,7 +21,7 @@ $ cd ~/.useful
 $ pip install -r requirements.txt
 ```
 
-#### Update
+#### アップデート方法
 ```bash
 $ git pull origin master
 ```
