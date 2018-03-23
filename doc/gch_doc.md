@@ -2,6 +2,14 @@
 ###### Table of Contesnts
 - [Installation](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#installation)
 - [Option](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#options)
+  - [`-g`/`--gitpath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-g-or---gitpath)
+  - [`-f`/`--filepath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-f-or---filepath)
+  - [`-b`/`--branch`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-b-or---branch)
+  - [`-p`/`--push`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-p-or---push)
+  - [`-d`/`--detail`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-d-or---detail)
+  - [`-l`/`--log`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-l-or---log)
+  - [`-c`/`--commit`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-c-or---commit)
+  - [`-u`/`--unstage`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-u-or---unstage)
 
 
 ### Installation
