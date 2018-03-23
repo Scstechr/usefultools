@@ -17,7 +17,7 @@ Options:
 
 Official document of __GCH__ (Git Commit Handler).
 Recommended to use with `alias`, such as `alias gch='gch.py'`. after exporting PATH of the cloned folder.
-Every command used in this script is visible as such:
+Every command used in this script are visible as such:
 ```bash
 >> EXECUTE: git status --short
 ```
@@ -91,10 +91,19 @@ Theres some changes in branch `master`.
 3: Force Checkout to branch `test`
 Answer:
 ```
-`git diff --stat` will be executed automatically. If you pick
-- 1, 2: it will `commit`/`stash` changes and `checkout`.
-- 3: will execute `git checkout -f test`, ignoring all changes.
+`git diff --stat` will be executed automatically.
 
+ If you pick...
+- 1, 2: `commit`/`stash` changes and `checkout`.
+- 3: Execute `git checkout -f test`, ignoring all changes.
+
+#### `-d` or `--detail`
+
+Option for detailed `git diff`.
+
+#### `-l` or `--log`
+
+Display `git log` with some options.
 
 <!--##### `-p` or `--gitpath`
 - __Default:__  `.`
