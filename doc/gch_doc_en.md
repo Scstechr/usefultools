@@ -103,8 +103,10 @@ Currently on branch `master` but tried to commit to branch `test`.
 3: Checkout to branch `test`  
 Answer:
 ```
-If you want to abort process, use `Ctrl-C`.
-__Merge option (1) is not recommended, because it does not take merge conflict in count__. If there are changes to commit and you choose option (3), there will be three choices to pick next.
+:warning:
+__Merge option (1) is not recommended, since it does not take merge conflicts in consideration. `Ctrl-C` to abort.__
+
+If there are changes to commit and you choose option (3), there will be three choices to pick next.
 ```bash
 >> BRANCH ISSUE!
 Answer: 3
