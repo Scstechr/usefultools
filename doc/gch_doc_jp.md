@@ -56,7 +56,50 @@ Options:
 ここで，どの`.git`を使うかパスで指定することができます．
 省略した場合，`.`にある`.git`を用いて動作を行います．
 
-##### 構成例
+##### 指定したパスに`.git`が存在しない場合
+
+```bash
+$ gch
+
+>> WARNING!: It seems path:`<PATH>` does not have `.git` folder.
+Initialize? [y/N]:
+```
+`y`を入力した場合 かつ `~/.gitconfig`が存在しない場合は`username`, `email`, `editor`, `diff-tool`の設定を行います．
+
+```bash
+~/.gitconfig file does not exist. => Start Initialization!
+username: Scstechr
+email: teufelkonig@gmail.com
+>> EXECUTE: git config --global user.name "Scstechr"
+>> EXECUTE: git config --global user.email teufelkonig@gmail.com
+Do you want to use emacs instead of vim as an editor? [y/N]: N
+# using vimdiff as a merge tool
+>> EXECUTE: git config --global merge.tool vimdiff
+>> EXECUTE: cat ~/.gitconfig
+[user]
+	name = Scstechr
+	email = teufelkonig@gmail.com
+[merge]
+	tool = vimdiff
+```
+その後, レポジトリの初期設定を始めます．予め`~/.gitconfig`が存在する場合は上の設定をスキップします．
+この際，レポジトリ名を設定します．
+```bash
+Title of this repository(project): test_dir
+>> EXECUTE: git init
+Initialized empty Git repository in /Users/moinaga/test_dir/.git/
+>> EXECUTE: touch .gitignore
+>> EXECUTE: touch README.md
+>> EXECUTE: echo ".*" >> .gitignore
+>> EXECUTE: echo "# TEST_DIR" >> README.md
+>> EXECUTE: git status --short
+?? README.md
+>> EXECUTE: git diff --stat
+** no push **
+```
+
+##### 指定したパスに`.git`が存在する場合
+###### 構成例
 ```bash
 -- Main
      |--.git/

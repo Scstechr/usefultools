@@ -54,8 +54,50 @@ Every command used in this script are visible as such:
 The capability of this tag is that of `git --git-dir=<path>`.
 With this tag, user can specify which `.git` folder to use for commit etc.
 Default is set to `.`, which will be selected if `-g` was abridged.
+##### If selected PATH does not have `.git` folder
 
-##### Example of File Tree
+```bash
+$ gch
+
+>> WARNING!: It seems path:`<PATH>` does not have `.git` folder.
+Initialize? [y/N]:
+```
+If `~/.gitconfig` does exists before the execution of command, the following configuration of `username`, `email`, `editor`, `diff-tool` will start．
+
+```bash
+~/.gitconfig file does not exist. => Start Initialization!
+username: Scstechr
+email: teufelkonig@gmail.com
+>> EXECUTE: git config --global user.name "Scstechr"
+>> EXECUTE: git config --global user.email teufelkonig@gmail.com
+Do you want to use emacs instead of vim as an editor? [y/N]: N
+# using vimdiff as a merge tool
+>> EXECUTE: git config --global merge.tool vimdiff
+>> EXECUTE: cat ~/.gitconfig
+[user]
+	name = Scstechr
+	email = teufelkonig@gmail.com
+[merge]
+	tool = vimdiff
+```
+After the configuration, initialization of repository/project starts.
+
+```bash
+Title of this repository(project): test_dir
+>> EXECUTE: git init
+Initialized empty Git repository in /Users/moinaga/test_dir/.git/
+>> EXECUTE: touch .gitignore
+>> EXECUTE: touch README.md
+>> EXECUTE: echo ".*" >> .gitignore
+>> EXECUTE: echo "# TEST_DIR" >> README.md
+>> EXECUTE: git status --short
+?? README.md
+>> EXECUTE: git diff --stat
+** no push **
+```
+
+##### If selected PATH has a `.git` folder
+###### Example of File Tree
 ```bash
 -- Main
      |--.git/

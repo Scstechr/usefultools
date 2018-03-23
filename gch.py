@@ -110,8 +110,10 @@ def isExist(command):
 
 def initialize():
     # git confi
-    if not path.exists("~/.gitconfig"):
+    gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
+    if not path.exists(gitconfigpath):
         click.echo("~/.gitconfig file does not exist. => Start Initialization!")
+        click.echo("** Configureation of global settings **")
         username = click.prompt("username", type=str)
         email = click.prompt("email", type=str)
         issues.EXECUTE([f'git config --global user.name "{username}"',\
@@ -119,16 +121,17 @@ def initialize():
 
         if click.confirm('Do you want to use emacs instead of vim as an editor?'):
             issues.EXECUTE([f'git config --global core.editor emacs'])
-        click.echo("# using vimdiff as a merge tool")
-        issues.EXECUTE([f'git config --global merge.tool vimdiff',\
+        issues.EXECUTE(['git config --global credential.helper osxkeychain',\
+                        'git config --global core.excludesfile ~/.gitignore_global',\
+                        'git config --global merge.tool vimdiff',\
                          'cat ~/.gitconfig'])
     title = click.prompt('Title of this repository(project)').upper()
-    issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md'])
-    issues.EXECUTE(['echo ".*" >> .gitignore', f'echo "# {title}" >> README.md'])
+    issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md',\
+                    'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global', 'echo "# {title}" >> README.md'])
 
 # Explanation of the options showed in --help flag
 exp_g = 'Path of dir that contains `.git`. > Default: .'
-exp_f = 'Path of staging file/diry.        > Default: .'
+exp_f = 'Path/Regex of staging file/dir.   > Default: .'
 exp_b = 'Commiting branch.                 > Default: master'
 exp_p = 'Push or not.                      > Default: False'
 exp_d = 'Detailed diff.                    > Default: False'
@@ -138,7 +141,7 @@ exp_u = 'Unstage all files.                > Default: False'
 
 @click.command()
 @click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_g)
-@click.option('-f', '--filepath', default='.', type=click.Path(exists=True), help=exp_f)
+@click.option('-f', '--filepath', default='.', type=str, help=exp_f)
 @click.option('-b', '--branch', default='master', type=str, help=exp_b)
 @click.option('-p', '--push', is_flag='False', help=exp_p)
 @click.option('-d', '--detail', is_flag='False', help=exp_d)
@@ -165,6 +168,19 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
         issues.EXECUTE(['git rm -r --cached .'])
     issues.EXECUTE(['git status --short'])
 
+    # Commit or not
+    if isExist(f'git status --short'):
+        issues.EXECUTE([f'git diff --stat'])
+        if detail:
+            issues.EXECUTE([f'git add .',\
+                            f'git diff --cached --ignore-all-space --ignore-blank-lines',\
+                            f'git reset'])
+        if commit:
+            issues.EXECUTE([f'git add {filepath}'])
+            Commit()
+    else:
+        click.echo('Clean State')
+
     if log:
         issues.EXECUTE(['git log --stat --oneline --graph --decorate'])
 
@@ -174,20 +190,11 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
             issues.BRANCH()
             branch = setBranch(branch, filepath)
         
-    # Commit or not
-    if isExist(f'git status --short'):
-        issues.EXECUTE([f'git diff --stat'])
-        if detail:
-            issues.EXECUTE([f'git diff --cached --ignore-all-space --ignore-blank-lines'])
-        if commit:
-            issues.EXECUTE([f'git add {filepath}'])
-            Commit()
-    else:
-        click.echo('Clean State')
 
     # Push or not
     if not push:
-        click.echo('** no push **')
+        pass
+        #click.echo('** no push **')
     elif not isExist(f'git remote -v'):
         click.echo('** no remote repository **')
     else:
