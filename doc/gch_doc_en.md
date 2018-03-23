@@ -1,17 +1,15 @@
 # GCH: Git Commit Handler
-###### Table of Contesnts
-- [Installation](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#installation)
-  - [Update](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#update)
-- [Option](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#options)
-  - [`-g`/`--gitpath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-g-or---gitpath)
-  - [`-f`/`--filepath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-f-or---filepath)
-  - [`-b`/`--branch`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-b-or---branch)
-  - [`-p`/`--push`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-p-or---push)
-  - [`-d`/`--detail`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-d-or---detail)
-  - [`-l`/`--log`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-l-or---log)
-  - [`-c`/`--commit`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-c-or---commit)
-  - [`-u`/`--unstage`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-u-or---unstage)
-
+- Table of Contents
+	- [Installation](#installation)
+		- [Update](#update)
+	- [Options](#options)
+		- [`-g` or `--gitpath`](#-g-or-gitpath)
+		- [`-f` or `--filepath`](#-f-or-filepath)
+		- [`-b` or `--branch`](#-b-or-branch)
+		- [`-d` or `--detail`](#-d-or-detail)
+		- [`-l` or `--log`](#-l-or-log)
+		- [`-c` or `--commit`](#-c-or-commit)
+		- [`-u` or `--unstage`](#-u-or-unstage)
 
 ### Installation
 ```bash
