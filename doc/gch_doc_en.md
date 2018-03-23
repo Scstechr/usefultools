@@ -58,9 +58,9 @@ Default is set to `.`, which will be selected if `-g` was abridged.
 
 ##### Example of File Tree
 ```bash
--- Main <- A
+-- Main
      |--.git/
-     |--tests/ <-B
+     |--tests/
      |    |--.git/  
      |    |--.gitignore  
      |    |--README.md  

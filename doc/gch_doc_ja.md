@@ -1,7 +1,7 @@
 # GCH: Git Commit Handler
 ###### Table of Contesnts
-- [Installation](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#installation)
-- [Option](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#options)
+- [インストール](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#インストール)
+- [オプション](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#オプション)
   - [`-g`/`--gitpath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-g-or---gitpath)
   - [`-f`/`--filepath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-f-or---filepath)
   - [`-b`/`--branch`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-b-or---branch)
@@ -12,7 +12,7 @@
   - [`-u`/`--unstage`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-u-or---unstage)
 
 
-### Installation
+### インストール
 ```bash
 $ gch --help
 Usage: gch.py [OPTIONS]
@@ -29,26 +29,26 @@ Options:
   --help               Show this message and exit.
 ```
 
-Official document of __GCH__ (Git Commit Handler).
-Recommended to use with `alias`, such as `alias gch='gch.py'`. after exporting PATH of the cloned folder.
-Every command used in this script are visible as such:
+
+__GCH__ (Git Commit Handler)の公式ドキュメントです.
+`git clone`してインストールした後に`.bash_profile` に PATHを通した上で`alias gch='gch.py'`といった`alias`と組み合わせて使うことを推奨しています．__GCH__ で実行されるシェルのコマンドは以下のように可視化されて実行されます．
 ```bash
 >> EXECUTE: git status --short
 ```
 
-### Options
+### オプション
 
 #### `-g` or `--gitpath`
 
-The capability of this tag is that of `git --git-dir=<path>`.
-With this tag, user can specify which `.git` folder to use for commit etc.
-Default is set to `.`, which will be selected if `-g` was abridged.
+`git --git-dir=<path>`と同様の機能を有しています．
+ここで，どの`.git`を使うかパスで指定することができます．
+省略した場合，`.`にある`.git`を用いて動作を行います．
 
-##### Example of File Tree
+##### 構成例
 ```bash
--- Main <- A
+-- Main
      |--.git/
-     |--tests/ <-B
+     |--tests/
      |    |--.git/  
      |    |--.gitignore  
      |    |--README.md  
@@ -58,30 +58,30 @@ Default is set to `.`, which will be selected if `-g` was abridged.
      +--main.c  
 ```
 
-If user was in ...
-- `Main`:
-  1. If `-g` was abridged, it selects `Main/.git` as a target `.git` folder.
+ユーザがどのフォルダにいるかで動作が異なります．
+- `Main`にいた場合:
+  1. `-g`が省略された場合, `Main/.git`を用います．
 - `Main/tests`:
-  1. If `-g` was abridged, it selects `Main/test/.git` as a target `.git` folder.
-  2. If `-g` was set to `..` i.e. `-g ..`, it selects `Main/.git` as a target `.git` folder.
+  1. `-g`が省略された場合, `Main/test/.git`を用います.
+  2. `-g ..`とパスを指定した場合， `Main/.git`を用います.
 
 #### `-f` or `--filepath`
 
-If user wants to `git add` only specific file, then please declare it with `-f <FILE>`. Otherwise, `git add .` will be executed by default.
+特定のファイルのみを `git add` したい場合， `-f <FILE>`のように指定することができます. `-f`を省略した場合`.`の(`.gitignore`で指定されたファイルを覗く)全てのファイルを`git add`します．
 
 #### `-b` or `--branch`
 
-If user wants to specify committing branch, then please declare it with `-b <BRANCH>`. Otherwise, `master` branch will be used.
+`commit`に用いるブランチを指定することができます．
+`-b`を省略した場合，`master`ブランチを用います．
 
-##### Example of Branch list
+##### ブランチの一覧例
 ```bash
 $ git branch
 * master
   test
 ```
-In the situation like above, where current branch was `master`:
-- `-b master` or abridging `-b` does not make any change.
-- `-b test` raises `BranchIssue` with number of choices.
+上記の状態(すなわち現在のブランチが`master`ブランチ)の場合，`-b master` あるいは `-b` を省略した場合ブランチの切り替えは行われません．
+一方で，`-b test`のように`commit`するブランチを指定し，かつ指定したブランチが現在のブランチと異なる場合，`BRANCH ISSUE!`が発生します．
 
 ```bash
 >> BRANCH ISSUE!
@@ -91,8 +91,12 @@ Currently on branch `master` but tried to commit to branch `test`.
 3: Checkout to branch `test`  
 Answer:
 ```
-If you want to abort process, use `Ctrl-C`.
-__Merge option (1) is not recommended, because it does not take merge conflict in count__. If there are changes to commit and you choose option (3), there will be three choices to pick next.
+このような選択が必要な場合，`Ctrl-C`を実行することでGCHの動作を中断することができます．
+
+:warning: __`merge`を実行する1つめの選択肢は，あらかじめ`merge conflict`が発生しないことが予測された場合を除き推奨されていません__.
+
+3を選択した場合，前回の`commit`から変更されたファイルが存在しない場合は指定したブランチに`checkout`します．前述の条件を満たさない場合，`BRANCH ISSUE!`が発生します．この際`git diff --stat`は自動的に実行されます.
+
 ```bash
 >> BRANCH ISSUE!
 Answer: 3
@@ -106,45 +110,21 @@ Theres some changes in branch `master`.
 3: Force Checkout to branch `test`
 Answer:
 ```
-`git diff --stat` will be executed automatically.
 
- If you pick...
-- 1, 2: `commit`/`stash` changes and `checkout`.
-- 3: Execute `git checkout -f test`, ignoring all changes.
+1, 2を選択した場合，`commit`/`stash`後に指定したブランチに`checkout`します． 3を選択した場合，`git checkout -f <BRANCH>`が実行されます．このとき，前回の`commit`から変更した箇所は全て破棄されます．
 
 #### `-d` or `--detail`
 
-Option for detailed `git diff`.
+`git diff`が詳細になるオプションを有効にします. `diff-tools`として`vimdiff`を想定しています．オプションについては実行時に確認できます．
 
 #### `-l` or `--log`
 
-Display `git log` with some options.
+作者が考える最善なオプションを付加された`git log`を実行します．オプションについては実行時に確認できます．
 
 #### `-c` or `--commit`
 
-`git commit` with commit message.
+この省略した場合，`git commit`は実行されません.
 
 #### `-u` or `--unstage`
 
-`git rm -r <PATH>` if there are any staged files.
-
-
-<!--##### `-p` or `--gitpath`
-- __Default:__  `.`
-- __Argument (Option):__ `<PATH>`
-
-##### `-d` or `--gitpath`
-- __Default:__  `.`
-- __Argument (Option):__ `<PATH>`
-
-##### `-l` or `--gitpath`
-- __Default:__  `.`
-- __Argument (Option):__ `<PATH>`
-
-##### `-c` or `--gitpath`
-- __Default:__  `.`
-- __Argument (Option):__ `<PATH>`
-
-##### `-u` or `--gitpath`
-- __Default:__  `.`
-- __Argument (Option):__ `<PATH>` -->
+それまでに`git add`したファイルがあった場合はそれらを全て`unstage`します．
