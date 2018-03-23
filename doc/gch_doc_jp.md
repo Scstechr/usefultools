@@ -1,4 +1,5 @@
 # GCH: Git Commit Handler
+__GCH__ (Git Commit Handler)の公式ドキュメントです.
 ###### Table of Contents
 
 - [インストール](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#インストール)
@@ -14,6 +15,18 @@
 
 
 ### インストール
+```bash
+$ git clone https://github.com/Scstechr/usefultools.git ~/.useful
+$ cd ~/.useful
+$ pip install -r requirements.txt
+```
+
+#### Update
+```bash
+$ git pull origin master
+```
+
+### オプション
 ```bash
 $ gch --help
 Usage: gch.py [OPTIONS]
@@ -31,13 +44,11 @@ Options:
 ```
 
 
-__GCH__ (Git Commit Handler)の公式ドキュメントです.
+
 `git clone`してインストールした後に`.bash_profile` に PATHを通した上で`alias gch='gch.py'`といった`alias`と組み合わせて使うことを推奨しています．__GCH__ で実行されるシェルのコマンドは以下のように可視化されて実行されます．
 ```bash
 >> EXECUTE: git status --short
 ```
-
-### オプション
 
 #### `-g` or `--gitpath`
 

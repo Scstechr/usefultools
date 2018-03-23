@@ -1,4 +1,5 @@
 # GCH: Git Commit Handler
+Official document of __GCH__ (Git Commit Handler).
 ###### Table of Contents
 - [Installation](#installation)
 	- [Update](#update)
@@ -41,7 +42,7 @@ Options:
   --help               Show this message and exit.
 ```
 
-Official document of __GCH__ (Git Commit Handler).
+
 Recommended to use with `alias`, such as `alias gch='gch.py'`. after exporting PATH of the cloned folder.
 Every command used in this script are visible as such:
 ```bash
