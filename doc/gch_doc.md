@@ -1,4 +1,10 @@
 # GCH: Git Commit Handler
+###### Table of Contesnts
+- [Installation](#installation)
+- [Option](#option)
+
+
+### Installation
 ```bash
 $ gch --help
 Usage: gch.py [OPTIONS]
@@ -21,7 +27,8 @@ Every command used in this script are visible as such:
 ```bash
 >> EXECUTE: git status --short
 ```
-### Options:
+
+### Options
 
 #### `-g` or `--gitpath`
 
