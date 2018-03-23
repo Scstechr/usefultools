@@ -1,7 +1,7 @@
 # GCH: Git Commit Handler
 ###### Table of Contesnts
-- [Installation](###installation)
-- [Option](###option)
+- [Installation](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#installation)
+- [Option](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#options)
 
 
 ### Installation
