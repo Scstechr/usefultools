@@ -105,6 +105,10 @@ Option for detailed `git diff`.
 
 Display `git log` with some options.
 
+#### `-c` or `--commit`
+
+`git commit` with commit message.
+
 <!--##### `-p` or `--gitpath`
 - __Default:__  `.`
 - __Argument (Option):__ `<PATH>`
