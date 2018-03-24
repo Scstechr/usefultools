@@ -168,7 +168,10 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
         issues.EXECUTE(['git rm -r --cached .'])
     issues.EXECUTE(['git status --short'])
 
+    if log:
+        issues.EXECUTE(['git log --stat --oneline --graph --decorate'])
     # Commit or not
+
     if isExist(f'git status --short'):
         issues.EXECUTE([f'git diff --stat'])
         if detail:
@@ -181,8 +184,6 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
     else:
         click.echo('Clean State')
 
-    if log:
-        issues.EXECUTE(['git log --stat --oneline --graph --decorate'])
 
     if isExist('git branch'):
         current_branch = getCurrentBranch()
