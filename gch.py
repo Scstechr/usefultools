@@ -122,8 +122,12 @@ def initialize():
         if click.confirm('Do you want to use emacs instead of vim as an editor?'):
             issues.EXECUTE([f'git config --global core.editor emacs'])
         issues.EXECUTE(['git config --global credential.helper osxkeychain',\
-                        'git config --global core.excludesfile ~/.gitignore_global',\
-                        'git config --global merge.tool vimdiff',\
+                        'git config --global core.excludesfile ~/.gitignore_global'])
+        if click.confirm('Do you want to use emacs instead of vim as a diff-tool?'):
+            issues.EXECUTE([f'git config --global diff.tool ediff'])
+        else:
+            issues.EXECUTE([f'git config --global diff.tool vimdiff'])
+        issues.EXECUTE([f'git config --global merge.tool vimdiff',\
                          'cat ~/.gitconfig'])
     title = click.prompt('Title of this repository(project)').upper()
     issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md',\
