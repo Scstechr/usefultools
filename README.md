@@ -35,6 +35,7 @@ Options:
 - Executes `git` related commands as such:
 	- `git init`, `git commit`, `git diff`, `git add`, `git push`
 - Some issues with `merge` still exists (when conflict happens).
+	- Attempts to avoid conflict before merge with applying patch.
 - Document available: :us: [English](doc/gch_doc_en.md) / :jp: [Japanese](doc/gch_doc_jp.md)
 
 #### Auto-Executor
