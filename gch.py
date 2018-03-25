@@ -10,6 +10,7 @@ from os import path, chdir
 import six
 if not six.PY3:
     sp.call('echo "VERSION ERROR! PLEASE USE PYTHON 3.6.X"', shell=True)
+    sys.exit()
 try:
     import click
 except ImportError:
