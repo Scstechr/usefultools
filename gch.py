@@ -95,14 +95,17 @@ def globalsetting():
 
     if click.confirm('Do you want to use emacs instead of vim as an editor?'):
         issues.execute([f'git config --global core.editor emacs'])
+    else:
+        issues.execute([f'git config --global core.editor vim'])
     issues.execute(['git config --global credential.helper osxkeychain',\
                     'git config --global core.excludesfile ~/.gitignore_global'])
     if click.confirm('Do you want to use ediff instead of vimdiff?'):
-        issues.execute([f'git config --global diff.tool ediff'])
+        issues.execute([f'git config --global diff.tool ediff',\
+                        f'git config --global merge.tool ediff'])
     else:
-        issues.execute([f'git config --global diff.tool vimdiff'])
-    issues.execute([f'git config --global merge.tool vimdiff',\
-                     'cat ~/.gitconfig'])
+        issues.execute([f'git config --global diff.tool vimdiff',\
+                        f'git config --global merge.tool vimdiff'])
+    issues.execute([f'cat ~/.gitconfig'])
 
 def initialize(flag=False):
     # git confi
