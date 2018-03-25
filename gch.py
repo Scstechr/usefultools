@@ -139,14 +139,15 @@ def initialize():
                     'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global', 'echo "# {title}" >> README.md'])
 
 # Explanation of the options showed in --help flag
-exp_g = 'Path of dir that contains `.git`. > Default: .'
-exp_f = 'Path/Regex of staging file/dir.   > Default: .'
-exp_b = 'Commiting branch.                 > Default: master'
-exp_p = 'Push or not.                      > Default: False'
-exp_d = 'Detailed diff.                    > Default: False'
-exp_l = 'Git log with option.              > Default: False'
-exp_c = 'Commit or not.                    > Default: False'
-exp_r = 'Reset (remove all add).           > Default: False'
+exp_g = 'Path of dir that contains `.git`.   > Default: .'
+exp_f = 'Path/Regex of staging file/dir.     > Default: .'
+exp_b = 'Commiting branch.                   > Default: master'
+exp_p = 'Push or not.                        > Default: False'
+exp_d = 'Detailed diff.                      > Default: False'
+exp_l = 'Git log with option.                > Default: False'
+exp_c = 'Commit or not.                      > Default: False'
+exp_r = 'Reset (remove all add).             > Default: False'
+exp_e = 'Choose which remote repo. to push.  > Default: False'
 
 @click.command()
 @click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_g)
@@ -157,7 +158,8 @@ exp_r = 'Reset (remove all add).           > Default: False'
 @click.option('-l', '--log', is_flag='False', help=exp_l)
 @click.option('-c', '--commit', is_flag='False', help=exp_c)
 @click.option('-r', '--reset', is_flag='False', help=exp_r)
-def main(gitpath, filepath, branch, push, detail, log, commit, reset):
+@click.option('--remote', default='origin', type=str, help=exp_e)
+def main(gitpath, filepath, branch, push, detail, log, commit, reset, remote):
 
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
@@ -208,7 +210,7 @@ def main(gitpath, filepath, branch, push, detail, log, commit, reset):
     elif not isExist(f'git remote -v'):
         click.echo('** no remote repository **')
     else:
-        issues.EXECUTE([f'git push -u origin {branch}'])
+        issues.EXECUTE([f'git push -u {remote} {branch}'])
 
 if __name__ == "__main__":
     main()
