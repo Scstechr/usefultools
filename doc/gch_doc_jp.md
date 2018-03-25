@@ -49,6 +49,8 @@ Options:
 ```bash
 >> EXECUTE: git status --short
 ```
+すなわち，ユーザ自身が上記のコマンドをシェルで実行することをGCHは代行しているといえます．
+
 
 #### `-g` or `--gitpath`
 
@@ -83,7 +85,7 @@ Do you want to use emacs instead of vim as an editor? [y/N]: N
 	tool = vimdiff
 ```
 その後, レポジトリの初期設定を始めます．予め`~/.gitconfig`が存在する場合は上の設定をスキップします．
-この際，レポジトリ名を設定します．
+この際，レポジトリ名を設定します．ここで入力したレポジトリ名は`README.md`のタイトルとして使用されます．
 ```bash
 Title of this repository(project): test_dir
 >> EXECUTE: git init
@@ -97,6 +99,7 @@ Initialized empty Git repository in /Users/moinaga/test_dir/.git/
 >> EXECUTE: git diff --stat
 ** no push **
 ```
+初期化と同時に`*.`を書き込んだ`.gitignore`とレポジトリ名が入った`README.md`が生成されていることがわかると思います．
 
 ##### 指定したパスに`.git`が存在する場合
 ###### 構成例
@@ -116,13 +119,14 @@ Initialized empty Git repository in /Users/moinaga/test_dir/.git/
 ユーザがどのフォルダにいるかで動作が異なります．
 - `Main`にいた場合:
   1. `-g`が省略された場合, `Main/.git`を用います．
-- `Main/tests`:
+- `Main/tests`にいた場合:
   1. `-g`が省略された場合, `Main/test/.git`を用います.
   2. `-g ..`とパスを指定した場合， `Main/.git`を用います.
 
 #### `-f` or `--filepath`
 
-特定のファイルのみを `git add` したい場合， `-f <FILE>`のように指定することができます. `-f`を省略した場合`.`の(`.gitignore`で指定されたファイルを覗く)全てのファイルを`git add`します．
+特定のファイルのみを `git add` したい場合， `-f <FILE>`のように指定することができます.
+`-f`を省略した場合`.`の(`.gitignore`で指定されたファイルを除く)全てのファイルを`git add`します．
 
 #### `-b` or `--branch`
 
@@ -179,7 +183,7 @@ Answer:
 
 #### `-c` or `--commit`
 
-この省略した場合，`git commit`は実行されません.
+省略した場合，`git commit`は実行されません.
 
 #### `-u` or `--unstage`
 
