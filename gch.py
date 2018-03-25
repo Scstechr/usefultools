@@ -108,20 +108,20 @@ def globalsetting():
     issues.execute([f'cat ~/.gitconfig'])
 
 def initialize(flag=False):
-    # git confi
-    gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
-    if not path.exists(gitconfigpath):
-        click.echo("~/.gitconfig file does not exist. => Start Initialization!")
-        globalsetting()
-    elif flag:
+    if flag:
         issues.execute([f'cat ~/.gitconfig'])
         globalsetting()
-        sys.exit()
-    readmepath = path.join(getcwd(), 'README.md')
-    if not path.exists(readmepath):
-        title = click.prompt('Title of this repository(project)').upper()
-        issues.execute(['git init', 'touch .gitignore', 'touch README.md',\
-                    'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global', 'echo "# {title}" >> README.md'])
+    else:
+        # git confi
+        gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
+        if not path.exists(gitconfigpath):
+            click.echo("~/.gitconfig file does not exist. => Start Initialization!")
+            globalsetting()
+        readmepath = path.join(getcwd(), 'README.md')
+        if not path.exists(readmepath):
+            title = click.prompt('Title of this repository(project)').upper()
+            issues.execute(['git init', 'touch .gitignore', 'touch README.md',\
+                        'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global', 'echo "# {title}" >> README.md'])
 
 # Explanation of the options showed in --help flag
 exp_g = 'Path of dir that contains `.git`.   > Default: .'
