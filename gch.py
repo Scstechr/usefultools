@@ -17,20 +17,11 @@ except ImportError:
     sp.call('echo "execute `pip install -r requirements.txt`"', shell=True)
 
 from pysrc import issues
+from pysrc.qs import getAnswer, isExist
 
 def b(string):
     ''' String Format for Branch Name '''
     return f'\033[3m\033[33m{string}\033[0m'
-
-def getAnswer(lst):
-    ''' Generates selection list and answering sequence '''
-    while(1):
-        [click.echo(f'{idx+1}: {option}') for idx, option in enumerate(lst)]
-        answer = click.prompt('Answer',type=int)
-        if answer > 0 and answer <= len(lst):
-            break
-        issues.warning('Please choose right answer from below:')
-    return answer
 
 def Commit():
     ''' Commit '''
@@ -94,11 +85,6 @@ def setBranch(branch, filepath):
                     issues.warning("Aborting Merge because conflict is likely to occur.")
                     issues.abort()
     return branch
-
-def isExist(command):
-    output = sp.getoutput(command)
-    flag = False if len(output) == 0 else True
-    return flag
 
 def globalsetting():
     click.echo("** Configureation of global settings **")
