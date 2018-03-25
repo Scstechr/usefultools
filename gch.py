@@ -88,23 +88,21 @@ def setBranch(branch, filepath):
 
 def globalsetting():
     click.echo("** Configureation of global settings **")
-    username = click.prompt("username", type=str)
-    email = click.prompt("email", type=str)
-    issues.execute([f'git config --global user.name "{username}"',\
+    issues.execute(['git config --global credential.helper osxkeychain',\
+                    'git config --global core.excludesfile ~/.gitignore_global'])
+    name, email = click.prompt("name", type=str), click.prompt("email", type=str)
+    issues.execute([f'git config --global user.name "{name}"',\
                     f'git config --global user.email {email}'])
 
     if click.confirm('Do you want to use emacs instead of vim as an editor?'):
         issues.execute([f'git config --global core.editor emacs'])
     else:
         issues.execute([f'git config --global core.editor vim'])
-    issues.execute(['git config --global credential.helper osxkeychain',\
-                    'git config --global core.excludesfile ~/.gitignore_global'])
+        
     if click.confirm('Do you want to use ediff instead of vimdiff?'):
-        issues.execute([f'git config --global diff.tool ediff',\
-                        f'git config --global merge.tool ediff'])
+        issues.execute([f'git config --global {x}.tool ediff' for x in ['diff', 'merge']])
     else:
-        issues.execute([f'git config --global diff.tool vimdiff',\
-                        f'git config --global merge.tool vimdiff'])
+        issues.execute([f'git config --global {x}.tool vimdff' for x in ['diff', 'merge']])
     issues.execute([f'cat ~/.gitconfig'])
 
 def initialize(flag=False):
@@ -121,7 +119,8 @@ def initialize(flag=False):
         if not path.exists(readmepath):
             title = click.prompt('Title of this repository(project)').upper()
             issues.execute(['git init', 'touch .gitignore', 'touch README.md',\
-                        'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global', 'echo "# {title}" >> README.md'])
+                            'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global',\
+                            'echo "# {title}" >> README.md'])
 
 # Explanation of the options showed in --help flag
 exp_g = 'Path of dir that contains `.git`.   > Default: .'
