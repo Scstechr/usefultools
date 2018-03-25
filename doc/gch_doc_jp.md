@@ -11,7 +11,7 @@ __GCH__ (Git Commit Handler)の公式ドキュメントです.
   - [`-d`/`--detail`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-d-or---detail)
   - [`-l`/`--log`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-l-or---log)
   - [`-c`/`--commit`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-c-or---commit)
-  - [`-u`/`--unstage`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-u-or---unstage)
+  - [`-r`/`--reset`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-r-or---reset)
 
 
 ### インストール
@@ -39,7 +39,7 @@ Options:
   -d, --detail         Detailed diff.                    > Default: False
   -l, --log            Git log with option.              > Default: False
   -c, --commit         Commit or not.                    > Default: False
-  -u, --unstage        Unstage all files.                > Default: False
+  -r, --reset          Reset (remove all add).           > Default: False
   --help               Show this message and exit.
 ```
 
@@ -185,6 +185,6 @@ Answer:
 
 省略した場合，`git commit`は実行されません.
 
-#### `-u` or `--unstage`
+#### `-r` or `--reset`
 
-それまでに`git add`したファイルがあった場合はそれらを全て`unstage`します．
+それまでに`git add`したファイルがあった場合はそれらを取り消します．
