@@ -100,7 +100,8 @@ def setBranch(branch, filepath):
                 else:
                     issues.EXECUTE([f'git checkout -f {branch}'])
             if answer == 1:
-                issues.EXECUTE([f'git merge {current_branch}'])
+                issues.EXECUTE([f'git format-patch `{branch}`..`{current_branch}` --stdout | git apply --check'])
+                issues.EXECUTE([f'git merge {current_branch}'], run=False)
     return branch
 
 def isExist(command):
