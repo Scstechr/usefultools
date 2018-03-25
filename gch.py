@@ -146,7 +146,7 @@ exp_p = 'Push or not.                      > Default: False'
 exp_d = 'Detailed diff.                    > Default: False'
 exp_l = 'Git log with option.              > Default: False'
 exp_c = 'Commit or not.                    > Default: False'
-exp_u = 'Unstage all files.                > Default: False'
+exp_r = 'Reset (remove all add).           > Default: False'
 
 @click.command()
 @click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_g)
@@ -156,8 +156,8 @@ exp_u = 'Unstage all files.                > Default: False'
 @click.option('-d', '--detail', is_flag='False', help=exp_d)
 @click.option('-l', '--log', is_flag='False', help=exp_l)
 @click.option('-c', '--commit', is_flag='False', help=exp_c)
-@click.option('-u', '--unstage', is_flag='False', help=exp_u)
-def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
+@click.option('-r', '--reset', is_flag='False', help=exp_r)
+def main(gitpath, filepath, branch, push, detail, log, commit, reset):
 
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
@@ -173,8 +173,8 @@ def main(gitpath, filepath, branch, push, detail, log, commit, unstage):
         else:
             issues.ABORT()
 
-    if unstage:
-        issues.EXECUTE(['git rm -r --cached .'])
+    if reset:
+        issues.EXECUTE(['git reset'])
     issues.EXECUTE(['git status --short'])
 
     if log:
