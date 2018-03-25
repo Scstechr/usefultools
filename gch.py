@@ -6,7 +6,7 @@ Git Commit Handler
 '''
 
 import sys, subprocess as sp
-from os import path, chdir
+from os import path, chdir, getcwd
 import six
 if not six.PY3:
     sp.call('echo "VERSION ERROR! PLEASE USE PYTHON 3.6.X"', shell=True)
@@ -114,29 +114,37 @@ def isExist(command):
     flag = False if len(output) == 0 else True
     return flag
 
-def initialize():
+def globalsetting():
+    click.echo("** Configureation of global settings **")
+    username = click.prompt("username", type=str)
+    email = click.prompt("email", type=str)
+    issues.EXECUTE([f'git config --global user.name "{username}"',\
+                    f'git config --global user.email {email}'])
+
+    if click.confirm('Do you want to use emacs instead of vim as an editor?'):
+        issues.EXECUTE([f'git config --global core.editor emacs'])
+    issues.EXECUTE(['git config --global credential.helper osxkeychain',\
+                    'git config --global core.excludesfile ~/.gitignore_global'])
+    if click.confirm('Do you want to use ediff instead of vimdiff?'):
+        issues.EXECUTE([f'git config --global diff.tool ediff'])
+    else:
+        issues.EXECUTE([f'git config --global diff.tool vimdiff'])
+    issues.EXECUTE([f'git config --global merge.tool vimdiff',\
+                     'cat ~/.gitconfig'])
+
+def initialize(flag=False):
     # git confi
     gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
     if not path.exists(gitconfigpath):
         click.echo("~/.gitconfig file does not exist. => Start Initialization!")
-        click.echo("** Configureation of global settings **")
-        username = click.prompt("username", type=str)
-        email = click.prompt("email", type=str)
-        issues.EXECUTE([f'git config --global user.name "{username}"',\
-                        f'git config --global user.email {email}'])
-
-        if click.confirm('Do you want to use emacs instead of vim as an editor?'):
-            issues.EXECUTE([f'git config --global core.editor emacs'])
-        issues.EXECUTE(['git config --global credential.helper osxkeychain',\
-                        'git config --global core.excludesfile ~/.gitignore_global'])
-        if click.confirm('Do you want to use emacs instead of vim as a diff-tool?'):
-            issues.EXECUTE([f'git config --global diff.tool ediff'])
-        else:
-            issues.EXECUTE([f'git config --global diff.tool vimdiff'])
-        issues.EXECUTE([f'git config --global merge.tool vimdiff',\
-                         'cat ~/.gitconfig'])
-    title = click.prompt('Title of this repository(project)').upper()
-    issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md',\
+        globalsetting()
+    elif flag:
+        globalsetting()
+        sys.exit()
+    readmepath = path.join(getcwd(), 'README.md')
+    if not path.exists(readmepath):
+        title = click.prompt('Title of this repository(project)').upper()
+        issues.EXECUTE(['git init', 'touch .gitignore', 'touch README.md',\
                     'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global', 'echo "# {title}" >> README.md'])
 
 # Explanation of the options showed in --help flag
@@ -148,7 +156,8 @@ exp_d = 'Detailed diff.                      > Default: False'
 exp_l = 'Git log with option.                > Default: False'
 exp_c = 'Commit or not.                      > Default: False'
 exp_r = 'Reset (remove all add).             > Default: False'
-exp_e = 'Choose which remote repo. to push.  > Default: False'
+exp_e = 'Choose which remote repo. to push.  > Default: origin'
+exp_i = 'Run initializer or not.             > Default: False'
 
 @click.command()
 @click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_g)
@@ -160,8 +169,11 @@ exp_e = 'Choose which remote repo. to push.  > Default: False'
 @click.option('-c', '--commit', is_flag='False', help=exp_c)
 @click.option('-r', '--reset', is_flag='False', help=exp_r)
 @click.option('--remote', default='origin', type=str, help=exp_e)
-def main(gitpath, filepath, branch, push, detail, log, commit, reset, remote):
+@click.option('-i', '--init', is_flag='False', help=exp_i)
+def main(gitpath, filepath, branch, push, detail, log, commit, reset, remote, init):
 
+    if init:
+        initialize(flag=True)
     #conversion to absolute path
     gitpath = path.abspath(gitpath)
     filepath = path.abspath(filepath)
