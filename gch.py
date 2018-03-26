@@ -109,6 +109,7 @@ def initialize(flag=False):
     if flag:
         issues.execute([f'cat ~/.gitconfig'])
         globalsetting()
+        sys.exit()
     else:
         # git confi
         gitconfigpath = path.join(path.expanduser('~'), '.gitconfig')
