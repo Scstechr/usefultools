@@ -22,14 +22,16 @@ $ gch --help
 Usage: gch.py [OPTIONS]
 
 Options:
-  -g, --gitpath PATH   Path of dir that contains `.git`. > Default: .
-  -f, --filepath PATH  Path of staging file/diry.        > Default: .
-  -b, --branch TEXT    Commiting branch.                 > Default: master
-  -p, --push           Push or not.                      > Default: False
-  -d, --detail         Detailed diff.                    > Default: False
-  -l, --log            Git log with option.              > Default: False
-  -c, --commit         Commit or not.                    > Default: False
-  -u, --unstage        Unstage all files.                > Default: False
+  -i, --init           Run initializer or not.             > Default: False
+  -g, --gitpath PATH   Path of dir that contains `.git`.   > Default: .
+  -f, --filepath TEXT  Path/Regex of staging file/dir.     > Default: .
+  -b, --branch TEXT    Commiting branch.                   > Default: master
+  -d, --detail         Detailed diff.                      > Default: False
+  -l, --log            Git log with option.                > Default: False
+  -c, --commit         Commit or not.                      > Default: False
+  -r, --reset          Reset (remove all add).             > Default: False
+  -p, --push           Push or not.                        > Default: False
+  --remote TEXT        Choose which remote repo. to push.  > Default: origin
   --help               Show this message and exit.
 ```
 - Executes `git` related commands as such:
