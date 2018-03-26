@@ -1,18 +1,5 @@
 # GCH: Git Commit Handler
 __GCH__ (Git Commit Handler)の公式ドキュメントです.
-###### Table of Contents
-
-- [インストール](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#インストール)
-- [オプション](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#オプション)
-  - [`-g`/`--gitpath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-g-or---gitpath)
-  - [`-f`/`--filepath`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-f-or---filepath)
-  - [`-b`/`--branch`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-b-or---branch)
-  - [`-p`/`--push`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-p-or---push)
-  - [`-d`/`--detail`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-d-or---detail)
-  - [`-l`/`--log`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-l-or---log)
-  - [`-c`/`--commit`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-c-or---commit)
-  - [`-r`/`--reset`](https://github.com/Scstechr/usefultools/blob/master/doc/gch_doc.md#-r-or---reset)
-
 
 ### インストール
 ```bash
