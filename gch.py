@@ -152,7 +152,7 @@ exp_c = f'Commit or not.                      > Default: {defaults["commit"]}'
 exp_r = f'Reset (remove all add).             > Default: {defaults["reset"]}'
 exp_p = f'Push or not.                        > Default: {defaults["push"]}'
 exp_e = f'Choose which remote repo. to push.  > Default: {defaults["remote"]}'
-exp_s = f'Save settings'
+exp_s = f'Save settings                       > Default: False'
 
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],   help=exp_i)
@@ -166,7 +166,7 @@ exp_s = f'Save settings'
 @click.option('-f', '--filepath', default=defaults['filepath'], type=str, help=exp_f)
 @click.option('-b', '--branch',   default=defaults['branch'],   type=str, help=exp_b)
 @click.option('--remote',         default=defaults['remote'],   type=str, help=exp_e)
-def main(init, gitpath, filepath, branch, push, detail, log, commit, reset, remote, save):
+def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch, remote):
 
     defaults['init'] = init
     defaults['gitpath'] = gitpath
