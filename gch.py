@@ -123,31 +123,74 @@ def initialize(flag=False):
                             'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global',\
                             'echo "# {title}" >> README.md'])
 
+
+def tf(flag):
+    if flag == 'False':
+        return False
+    else:
+        return True
+
+defaults = {}
+if not path.exists("./settings"):
+    issues.execute(["mkdir settings"])
+if path.exists("./settings/defaults.txt"):
+    with open("./settings/defaults.txt", 'r') as setting:
+        for lines in setting:
+            print(lines)
+else:
+    defaults['init'] = 'False'
+    defaults['gitpath'] = '.'
+    defaults['filepath'] = '.'
+    defaults['branch'] = 'master'
+    defaults['detail'] = 'False'
+    defaults['log'] = 'False'
+    defaults['commit'] = 'False'
+    defaults['reset'] = 'False'
+    defaults['push'] = 'False'
+    defaults['remote'] = 'origin'
+
 # Explanation of the options showed in --help flag
-exp_g = 'Path of dir that contains `.git`.   > Default: .'
-exp_f = 'Path/Regex of staging file/dir.     > Default: .'
-exp_b = 'Commiting branch.                   > Default: master'
-exp_p = 'Push or not.                        > Default: False'
-exp_d = 'Detailed diff.                      > Default: False'
-exp_l = 'Git log with option.                > Default: False'
-exp_c = 'Commit or not.                      > Default: False'
-exp_r = 'Reset (remove all add).             > Default: False'
-exp_e = 'Choose which remote repo. to push.  > Default: origin'
-exp_i = 'Run initializer or not.             > Default: False'
+exp_i = f'Run initializer or not.             > Default: {defaults["init"]}'
+exp_g = f'Path of dir that contains `.git`.   > Default: {defaults["gitpath"]}'
+exp_f = f'Path/Regex of staging file/dir.     > Default: {defaults["filepath"]}'
+exp_b = f'Commiting branch.                   > Default: {defaults["branch"]}'
+exp_d = f'Detailed diff.                      > Default: {defaults["detail"]}'
+exp_l = f'Git log with option.                > Default: {defaults["log"]}'
+exp_c = f'Commit or not.                      > Default: {defaults["commit"]}'
+exp_r = f'Reset (remove all add).             > Default: {defaults["reset"]}'
+exp_p = f'Push or not.                        > Default: {defaults["push"]}'
+exp_e = f'Choose which remote repo. to push.  > Default: {defaults["remote"]}'
+exp_s = f'Save settings'
 
 @click.command()
-@click.option('-i', '--init', is_flag='False', help=exp_i)
-@click.option('-g', '--gitpath', default='.', type=click.Path(exists=True), help=exp_g)
-@click.option('-f', '--filepath', default='.', type=str, help=exp_f)
-@click.option('-b', '--branch', default='master', type=str, help=exp_b)
-@click.option('-d', '--detail', is_flag='False', help=exp_d)
-@click.option('-l', '--log', is_flag='False', help=exp_l)
-@click.option('-c', '--commit', is_flag='False', help=exp_c)
-@click.option('-r', '--reset', is_flag='False', help=exp_r)
-@click.option('-p', '--push', is_flag='False', help=exp_p)
-@click.option('--remote', default='origin', type=str, help=exp_e)
-def main(gitpath, filepath, branch, push, detail, log, commit, reset, remote, init):
+@click.option('-i', '--init',     is_flag=False,   help=exp_i)
+@click.option('-d', '--detail',   is_flag=False,   help=exp_d)
+@click.option('-l', '--log',      is_flag=False,   help=exp_l)
+@click.option('-c', '--commit',   is_flag=False,   help=exp_c)
+@click.option('-r', '--reset',    is_flag=False,   help=exp_r)
+@click.option('-p', '--push',     is_flag=False,   help=exp_p)
+@click.option('-s', '--save',     is_flag=False,                help=exp_s)
+@click.option('-g', '--gitpath',  default=defaults['gitpath'],  type=click.Path(exists=True), help=exp_g)
+@click.option('-f', '--filepath', default=defaults['filepath'], type=str, help=exp_f)
+@click.option('-b', '--branch',   default=defaults['branch'],   type=str, help=exp_b)
+@click.option('--remote',         default=defaults['remote'],   type=str, help=exp_e)
+def main(init, gitpath, filepath, branch, push, detail, log, commit, reset, remote, save):
 
+    defaults['init'] = init
+    defaults['gitpath'] = gitpath
+    defaults['filepath'] = filepath
+    defaults['branch'] = branch
+    defaults['detail'] = detail 
+    defaults['log'] = log
+    defaults['commit'] = commit
+    defaults['reset'] = reset
+    defaults['push'] = push
+    defaults['remote'] = remote
+
+    if save:
+       print(defaults.items()) 
+
+    sys.exit()
     if init:
         initialize(flag=True)
     #conversion to absolute path
