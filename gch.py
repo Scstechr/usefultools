@@ -153,7 +153,7 @@ exp_r = f'Reset (remove all add).             > Default: {defaults["reset"]}'
 exp_p = f'Push or not.                        > Default: {defaults["push"]}'
 exp_e = f'Choose which remote repo. to push.  > Default: {defaults["remote"]}'
 exp_s = f'Save settings                       > Default: False'
-
+#
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],   help=exp_i)
 @click.option('-d', '--detail',   is_flag=defaults['detail'],   help=exp_d)
