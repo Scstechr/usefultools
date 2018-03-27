@@ -1,10 +1,10 @@
 init:False
 gitpath:..
 filepath:..
-branch:test
+branch:master
 detail:False
 log:False
-commit:True
+commit:False
 reset:False
 push:False
 remote:origin
