@@ -123,18 +123,9 @@ def initialize(flag=False):
                             'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global',\
                             'echo "# {title}" >> README.md'])
 
-
-def tf(flag):
-    if flag == 'False':
-        return False
-    else:
-        return True
-
 defaults = {}
-if not path.exists("./settings"):
-    issues.execute(["mkdir settings"])
-if path.exists("./settings/defaults.txt"):
-    with open("./settings/defaults.txt", 'r') as setting:
+if path.exists("./defaults.txt"):
+    with open("./defaults.txt", 'r') as setting:
         for lines in setting:
             print(lines)
 else:
@@ -163,13 +154,13 @@ exp_e = f'Choose which remote repo. to push.  > Default: {defaults["remote"]}'
 exp_s = f'Save settings'
 
 @click.command()
-@click.option('-i', '--init',     is_flag=False,   help=exp_i)
-@click.option('-d', '--detail',   is_flag=False,   help=exp_d)
-@click.option('-l', '--log',      is_flag=False,   help=exp_l)
-@click.option('-c', '--commit',   is_flag=False,   help=exp_c)
-@click.option('-r', '--reset',    is_flag=False,   help=exp_r)
-@click.option('-p', '--push',     is_flag=False,   help=exp_p)
-@click.option('-s', '--save',     is_flag=False,                help=exp_s)
+@click.option('-i', '--init',     is_flag=defaults['init'],   help=exp_i)
+@click.option('-d', '--detail',   is_flag=defaults['detail'],   help=exp_d)
+@click.option('-l', '--log',      is_flag=defaults['log'],   help=exp_l)
+@click.option('-c', '--commit',   is_flag=defaults['commit'],   help=exp_c)
+@click.option('-r', '--reset',    is_flag=defaults['reset'],   help=exp_r)
+@click.option('-p', '--push',     is_flag=defaults['push'],   help=exp_p)
+@click.option('-s', '--save',     is_flag='False', help=exp_s)
 @click.option('-g', '--gitpath',  default=defaults['gitpath'],  type=click.Path(exists=True), help=exp_g)
 @click.option('-f', '--filepath', default=defaults['filepath'], type=str, help=exp_f)
 @click.option('-b', '--branch',   default=defaults['branch'],   type=str, help=exp_b)
@@ -188,9 +179,9 @@ def main(init, gitpath, filepath, branch, push, detail, log, commit, reset, remo
     defaults['remote'] = remote
 
     if save:
-       print(defaults.items()) 
+        for k, v in defaults.items():
+            print(k, v)
 
-    sys.exit()
     if init:
         initialize(flag=True)
     #conversion to absolute path
