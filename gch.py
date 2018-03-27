@@ -125,9 +125,12 @@ def initialize(flag=False):
 
 defaults = {}
 if path.exists("./defaults.txt"):
-    with open("./defaults.txt", 'r') as setting:
-        for lines in setting:
-            print(lines)
+    with open("./defaults.txt", 'r') as readfile:
+        for line in readfile:
+            k, v = line.replace('\n','').split(":")
+            print(k, v)
+            defaults[str(k)] = str(v)
+    print(defaults)
 else:
     defaults['init'] = 'False'
     defaults['gitpath'] = '.'
@@ -179,8 +182,9 @@ def main(init, gitpath, filepath, branch, push, detail, log, commit, reset, remo
     defaults['remote'] = remote
 
     if save:
+        issues.execute(['rm defaults.txt'])
         for k, v in defaults.items():
-            print(k, v)
+            issues.execute([f'echo "{str(k)}:{str(v)}" >> defaults.txt'])
 
     if init:
         initialize(flag=True)

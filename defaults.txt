@@ -1,0 +1,10 @@
+init:False
+gitpath:.
+filepath:.
+branch:test
+detail:False
+log:False
+commit:True
+reset:False
+push:True
+remote:origin
