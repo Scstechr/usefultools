@@ -128,9 +128,7 @@ if path.exists("./defaults.txt"):
     with open("./defaults.txt", 'r') as readfile:
         for line in readfile:
             k, v = line.replace('\n','').split(":")
-            print(k, v)
             defaults[str(k)] = str(v)
-    print(defaults)
 else:
     defaults['init'] = 'False'
     defaults['gitpath'] = '.'
