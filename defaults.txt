@@ -6,5 +6,5 @@ detail:False
 log:False
 commit:True
 reset:False
-push:True
+push:False
 remote:origin
