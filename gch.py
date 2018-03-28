@@ -103,6 +103,9 @@ def globalsetting():
         issues.execute([f'git config --global {x}.tool ediff' for x in ['diff', 'merge']])
     else:
         issues.execute([f'git config --global {x}.tool vimdff' for x in ['diff', 'merge']])
+    format_string ="'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s'" 
+    string = f'"log --graph --date-order --all --pretty=format:{format_string} --date=short"'
+    issues.execute([f"git config --global alias.graph {string}"])
     issues.execute([f'cat ~/.gitconfig'])
 
 def initialize(flag=False):
