@@ -182,10 +182,11 @@ def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch
     defaults['push'] = push
     defaults['remote'] = remote
 
+    defaultspath = path.join(gitpath, 'defaults.txt')
     if save:
-        issues.execute(['rm defaults.txt'])
+        issues.execute([f'rm {defaultspath}'])
         for k, v in defaults.items():
-            issues.execute([f'echo "{str(k)}:{str(v)}" >> defaults.txt'])
+            issues.execute([f'echo "{str(k)}:{str(v)}" >> {defaultspath}'])
 
     if init:
         initialize(flag=True)
