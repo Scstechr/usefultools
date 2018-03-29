@@ -172,7 +172,7 @@ exp_s = f'Save settings                       > Default: False'
 def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch, remote):
 
     defaults['init'] = init
-    defaults['gitpath'] = gitpath
+    defaults['gitpath'] = path.abspath(gitpath)
     defaults['filepath'] = filepath
     defaults['branch'] = branch
     defaults['detail'] = detail 
