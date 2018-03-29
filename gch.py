@@ -124,7 +124,7 @@ def initialize(flag=False):
             title = click.prompt('Title of this repository(project)').upper()
             issues.execute(['git init', 'touch .gitignore', 'touch README.md',\
                             'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global',\
-                            'echo "# {title}" >> README.md'])
+                            f'echo "# {title}" >> README.md'])
 
 defaults = {}
 if path.exists("./defaults.txt"):
