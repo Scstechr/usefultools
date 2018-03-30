@@ -182,7 +182,7 @@ def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch
     defaults['push'] = push
     defaults['remote'] = remote
 
-    defaultspath = path.join(gitpath, 'defaults.txt')
+    defaultspath = path.join('.', 'defaults.txt')
     if save:
         issues.execute([f'rm {defaultspath}'])
         for k, v in defaults.items():

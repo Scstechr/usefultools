@@ -32,9 +32,9 @@ def main(new_alias, command):
             issues.warning(f'**not implemented! sorry **')
         sys.exit()
     else:
-        statement = f"{new_alias}='{command}'"
-        issues.execute([f'echo {statement} >> ~/.bash_profile',\
-                         'source ~/.bash_profile'])
+        statement = f"alias {new_alias}='{command}'"
+        issues.execute([f'echo {statement} >> ~/.bash_profile'])
+        print('please execute `source ~/.bash_profile` afterwards')
 
 if __name__ == '__main__':
     main()

@@ -1,10 +1,10 @@
 init:False
-gitpath:..
+gitpath:/Users/moinaga/.useful
 filepath:..
 branch:master
 detail:False
 log:False
-commit:False
+commit:True
 reset:False
-push:False
+push:True
 remote:origin
