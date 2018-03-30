@@ -33,7 +33,7 @@ def main(new_alias, command):
         sys.exit()
     else:
         statement = f"alias {new_alias}='{command}'"
-        issues.execute([f'echo {statement} >> ~/.bash_profile'])
+        issues.execute([f'echo "{statement}" >> ~/.bash_profile'])
         print('please execute `source ~/.bash_profile` afterwards')
 
 if __name__ == '__main__':
