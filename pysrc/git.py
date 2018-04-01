@@ -107,4 +107,5 @@ def initialize(flag=False):
             issues.execute(['git init', 'touch .gitignore', 'touch README.md',\
                             'echo ".*" >> .gitignore', f'echo ".*" >> ~/.gitignore_global',\
                             f'echo "# {title}" >> README.md'])
+            issues.execute(['git add -f .gitignore'])
 
