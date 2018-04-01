@@ -5,7 +5,6 @@ Git Commit Handler
 ==================
 '''
 
-
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 import click
@@ -21,7 +20,7 @@ def b(string):
     return f'\033[3m\033[33m{string}\033[0m'
 
 defaults = {}
-defaultspath = path.join(".", "defaults.txt")
+defaultspath = path.join(".", ".defaults.txt")
 if path.exists(defaultspath):
     with open(defaultspath, 'r') as readfile:
         for line in readfile:
@@ -41,33 +40,34 @@ else:
     defaults['pull'] = 'False'
 
 # Explanation of the options showed in --help flag
-exp_i = f'run initializer or not.'.ljust(35)+f'>Default:{defaults["init"]}'
-exp_g = f'Path of dir that contains `.git`.'.ljust(35)+f'>Default:{defaults["gitpath"]}'
-exp_f=f'Path/Regex of staging file/dir.'.ljust(35)+f'>Default:{defaults["filepath"]}'
-exp_b=f'Commiting branch.'.ljust(35)+f'>Default:{defaults["branch"]}'
-exp_d=f'Detailed diff.'.ljust(35)+f'>Default:{defaults["detail"]}'
-exp_l=f'Git log with option.'.ljust(35)+f'>Default:{defaults["log"]}'
-exp_c=f'Commit or not.'.ljust(35)+f'>Default:{defaults["commit"]}'
-exp_r=f'Reset (remove all add).'.ljust(35)+f'>Default:{defaults["reset"]}'
-exp_p=f'Push or not.'.ljust(35)+f'>Default:{defaults["push"]}'
-exp_e=f'Choose which remote repo.to push.'.ljust(35)+f'>Default:{defaults["remote"]}'
-exp_p2=f'git pull {defaults["remote"]} {defaults["branch"]}'.ljust(35)+f'>Default:False'
-exp_s=f'Save settings'.ljust(35)+f'>Default:False'
+exp_i=f'run initializer or not.'.ljust(38)+f'>Default:{defaults["init"]}'
+exp_g=f'Path of dir that contains `.git`.'.ljust(38)+f'>Default:{defaults["gitpath"]}'
+exp_f=f'Path/Regex of staging file/dir.'.ljust(38)+f'>Default:{defaults["filepath"]}'
+exp_b=f'Commiting branch.'.ljust(38)+f'>Default:{defaults["branch"]}'
+exp_d=f'Detailed diff.'.ljust(38)+f'>Default:{defaults["detail"]}'
+exp_l=f'Git log with option.'.ljust(38)+f'>Default:{defaults["log"]}'
+exp_c=f'Commit or not.'.ljust(38)+f'>Default:{defaults["commit"]}'
+exp_r=f'Reset all changes since last commit.'.ljust(38)+f'>Default:{defaults["reset"]}'
+exp_p=f'Push or not.'.ljust(38)+f'>Default:{defaults["push"]}'
+exp_e=f'Choose which remote repo.to push.'.ljust(38)+f'>Default:{defaults["remote"]}'
+exp_p2=f'git pull {defaults["remote"]} {defaults["branch"]}'.ljust(38)+f'>Default:False'
+exp_s=f'Save settings'.ljust(38)+f'>Default:False'
 
 @click.command()
 @click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
 @click.option('-d', '--detail',   is_flag=defaults['detail'],   help=exp_d)
 @click.option('-l', '--log',      is_flag=defaults['log'],      help=exp_l)
 @click.option('-c', '--commit',   is_flag=defaults['commit'],   help=exp_c)
-@click.option('-r', '--reset',    is_flag=defaults['reset'],    help=exp_r)
+@click.option('-r', '--remote',   default=defaults['remote'],    help=exp_e)
 @click.option('-p', '--push',     is_flag=defaults['push'],     help=exp_p)
-@click.option('-s', '--save',     is_flag='False',              help=exp_s)
 @click.option('-g', '--gitpath',  default=defaults['gitpath'],  type=click.Path(exists=True), help=exp_g)
 @click.option('-f', '--filepath', default=defaults['filepath'], type=str, help=exp_f)
 @click.option('-b', '--branch',   default=defaults['branch'],   type=str, help=exp_b)
-@click.option('--remote',         default=defaults['remote'],   type=str, help=exp_e)
-@click.option('--pull',           is_flag=defaults['remote'],   type=str, help=exp_p2)
-def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
+@click.option('-s', '--save',     is_flag='False',              help=exp_s)
+@click.option('--reset',          is_flag=defaults['reset'],   type=str, help=exp_r)
+@click.option('--pull',           is_flag=defaults['pull'],   type=str, help=exp_p2)
+def main(init, detail, log, commit, remote, push, gitpath, filepath, branch, save, reset, pull):
+#def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
 
     defaults['init'] = init
     defaults['gitpath'] = path.abspath(gitpath)
@@ -81,7 +81,6 @@ def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch
     defaults['remote'] = remote
     defaults['pull'] = pull
 
-    defaultspath = path.join('.', 'defaults.txt')
     if save:
         issues.execute([f'rm {defaultspath}'])
         for k, v in defaults.items():
