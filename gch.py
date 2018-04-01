@@ -17,7 +17,8 @@ except ImportError:
     sp.call('echo "execute `pip install -r requirements.txt`"', shell=True)
 
 from pysrc import issues
-from pysrc.qs import getAnswer, isExist
+from pysrc.qs import *
+from pysrc.git import *
 
 def b(string):
     ''' String Format for Branch Name '''

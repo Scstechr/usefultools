@@ -1,5 +1,5 @@
 import sys, subprocess as sp
 from os import path, chdir, getcwd
 
-import issues
-from qs import getAnswer, isExist
+from . import issues
+from . import qs
