@@ -5,28 +5,25 @@ Git Commit Handler
 ==================
 '''
 
+
 import sys, subprocess as sp
 from os import path, chdir, getcwd
-import six
-if not six.PY3:
-    sp.call('echo "VERSION ERROR! PLEASE USE PYTHON 3.6.X"', shell=True)
-    sys.exit()
-try:
-    import click
-except ImportError:
-    sp.call('echo "execute `pip install -r requirements.txt`"', shell=True)
+import click
 
 from pysrc import issues
 from pysrc.qs import *
 from pysrc.git import *
+
+issues.version(3)
 
 def b(string):
     ''' String Format for Branch Name '''
     return f'\033[3m\033[33m{string}\033[0m'
 
 defaults = {}
-if path.exists("./defaults.txt"):
-    with open("./defaults.txt", 'r') as readfile:
+defaultspath = path.join(".", "defaults.txt")
+if path.exists(defaultspath):
+    with open(defaultspath, 'r') as readfile:
         for line in readfile:
             k, v = line.replace('\n','').split(":")
             defaults[str(k)] = str(v)
@@ -41,33 +38,36 @@ else:
     defaults['reset'] = 'False'
     defaults['push'] = 'False'
     defaults['remote'] = 'origin'
+    defaults['pull'] = 'False'
 
 # Explanation of the options showed in --help flag
-exp_i = f'Run initializer or not.             > Default: {defaults["init"]}'
-exp_g = f'Path of dir that contains `.git`.   > Default: {defaults["gitpath"]}'
-exp_f = f'Path/Regex of staging file/dir.     > Default: {defaults["filepath"]}'
-exp_b = f'Commiting branch.                   > Default: {defaults["branch"]}'
-exp_d = f'Detailed diff.                      > Default: {defaults["detail"]}'
-exp_l = f'Git log with option.                > Default: {defaults["log"]}'
-exp_c = f'Commit or not.                      > Default: {defaults["commit"]}'
-exp_r = f'Reset (remove all add).             > Default: {defaults["reset"]}'
-exp_p = f'Push or not.                        > Default: {defaults["push"]}'
-exp_e = f'Choose which remote repo. to push.  > Default: {defaults["remote"]}'
-exp_s = f'Save settings                       > Default: False'
-#
+exp_i = f'run initializer or not.'.ljust(35)+f'>Default:{defaults["init"]}'
+exp_g = f'Path of dir that contains `.git`.'.ljust(35)+f'>Default:{defaults["gitpath"]}'
+exp_f=f'Path/Regex of staging file/dir.'.ljust(35)+f'>Default:{defaults["filepath"]}'
+exp_b=f'Commiting branch.'.ljust(35)+f'>Default:{defaults["branch"]}'
+exp_d=f'Detailed diff.'.ljust(35)+f'>Default:{defaults["detail"]}'
+exp_l=f'Git log with option.'.ljust(35)+f'>Default:{defaults["log"]}'
+exp_c=f'Commit or not.'.ljust(35)+f'>Default:{defaults["commit"]}'
+exp_r=f'Reset (remove all add).'.ljust(35)+f'>Default:{defaults["reset"]}'
+exp_p=f'Push or not.'.ljust(35)+f'>Default:{defaults["push"]}'
+exp_e=f'Choose which remote repo.to push.'.ljust(35)+f'>Default:{defaults["remote"]}'
+exp_p2=f'git pull {defaults["remote"]} {defaults["branch"]}'.ljust(35)+f'>Default:False'
+exp_s=f'Save settings'.ljust(35)+f'>Default:False'
+
 @click.command()
-@click.option('-i', '--init',     is_flag=defaults['init'],   help=exp_i)
+@click.option('-i', '--init',     is_flag=defaults['init'],     help=exp_i)
 @click.option('-d', '--detail',   is_flag=defaults['detail'],   help=exp_d)
-@click.option('-l', '--log',      is_flag=defaults['log'],   help=exp_l)
+@click.option('-l', '--log',      is_flag=defaults['log'],      help=exp_l)
 @click.option('-c', '--commit',   is_flag=defaults['commit'],   help=exp_c)
-@click.option('-r', '--reset',    is_flag=defaults['reset'],   help=exp_r)
-@click.option('-p', '--push',     is_flag=defaults['push'],   help=exp_p)
-@click.option('-s', '--save',     is_flag='False', help=exp_s)
+@click.option('-r', '--reset',    is_flag=defaults['reset'],    help=exp_r)
+@click.option('-p', '--push',     is_flag=defaults['push'],     help=exp_p)
+@click.option('-s', '--save',     is_flag='False',              help=exp_s)
 @click.option('-g', '--gitpath',  default=defaults['gitpath'],  type=click.Path(exists=True), help=exp_g)
 @click.option('-f', '--filepath', default=defaults['filepath'], type=str, help=exp_f)
 @click.option('-b', '--branch',   default=defaults['branch'],   type=str, help=exp_b)
 @click.option('--remote',         default=defaults['remote'],   type=str, help=exp_e)
-def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch, remote):
+@click.option('--pull',           is_flag=defaults['remote'],   type=str, help=exp_p2)
+def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch, remote, pull):
 
     defaults['init'] = init
     defaults['gitpath'] = path.abspath(gitpath)
@@ -79,6 +79,7 @@ def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch
     defaults['reset'] = reset
     defaults['push'] = push
     defaults['remote'] = remote
+    defaults['pull'] = pull
 
     defaultspath = path.join('.', 'defaults.txt')
     if save:
@@ -103,7 +104,8 @@ def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch
             issues.abort()
 
     if reset:
-        issues.execute(['git reset'])
+        if click.confirm("Are you sure you want to reset?"):
+            issues.execute(['git reset --hard'])
     issues.execute(['git status --short'])
 
     if log:
@@ -122,6 +124,8 @@ def main(init, detail, log, commit, reset, push, save, gitpath, filepath, branch
     else:
         click.echo('Clean State')
 
+    if pull:
+        issues.execute([f'git pull {remote} {branch}'])
 
     if isExist('git branch'):
         current_branch = getCurrentBranch()

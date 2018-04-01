@@ -16,3 +16,13 @@ def execute(command_list, run=True):
         click.echo(f'\033[94m>> execute: {command}\033[0m')
         if run == True:
             sp.call(command, shell=True)
+def version(version):
+    import six
+    try:
+        version = int(version)
+        if not six.PY3:
+            sp.call('echo "VERSION ERROR! PLEASE USE PYTHON 3.6.X"'\
+                    , shell=True)
+            sys.exit()
+    except:
+        sys.exit()
