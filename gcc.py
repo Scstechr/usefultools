@@ -9,18 +9,23 @@ def f(string):
 @click.command()
 @click.argument('filename')
 @click.option('-d', '--debug', is_flag='False', help='LLDB MODE TRIGGER')
-def main(filename, debug):
-        output = filename[:filename.find('.')] + '.out'
-        print("filename:", filename);
-        gcc = '/usr/local/bin/gcc-7'
-        if debug:
-            issues.execute([f'{gcc} {filename} -g -O0 -m32'])
-            issues.execute([f'lldb ./a.out'])
-            if click.confirm(f"Remove {f('a.out')} & related directory?"):
-                issues.execute([f'rm ./a.out', f'rm -r ./a.out.dSYM'])
-        else:
-            issues.execute([f'{gcc} -o3 -mtune=native -march=native {filename} -lm'])
-            issues.execute([f'./{output}'])
+@click.option('-r', '--run', is_flag='False', help='RUN AFTER COMPILE')
+def main(filename, debug, run):
+  output = filename[:filename.find('.')] + '.out'
+  gcc = '/usr/local/bin/gcc-7'
+  if not os.path.exists(gcc):
+    gcc = '/usr/bin/gcc'
+  opt = f'-O4 -Wall -mtune=native -march=native -o {output}'
+  debugstr = f'-pg -g -fprofile-arcs -ftest-coverage'
+  if debug:
+    issues.execute([f'{gcc} {opt} {debugstr} {filename} -lm'])
+    issues.execute([f'lldb ./{output}'])
+    if click.confirm(f"Remove {f(output)} & related directory?"):
+      issues.execute([f'rm ./{output}', f'rm -r ./{output}.dSYM'])
+  else:
+    issues.execute([f'{gcc} {opt} {filename} -lm'])
+    if run:
+      issues.execute([f'./{output}'])
 
 if __name__ == '__main__':
     main()

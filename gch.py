@@ -10,14 +10,10 @@ from os import path, chdir, getcwd
 import click
 
 from pysrc import issues
-from pysrc.qs import *
+from pysrc.qs import getAnswer, isExist 
 from pysrc.git import *
 
 issues.version(3)
-
-def b(string):
-    ''' String Format for Branch Name '''
-    return f'\033[3m\033[33m{string}\033[0m'
 
 defaults = {}
 defaultspath = path.join(".", ".defaults.txt")
