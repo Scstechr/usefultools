@@ -25,7 +25,7 @@ def main(filename, debug, run):
   else:
     issues.execute([f'{gcc} {opt} {filename} -lm'])
     if run:
-      issues.execute([f'./{output}'])
+      issues.execute([f'time ./{output}'])
 
 if __name__ == '__main__':
     main()
