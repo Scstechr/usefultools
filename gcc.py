@@ -15,7 +15,7 @@ def main(filename, debug, run):
   gcc = '/usr/local/bin/gcc-7'
   if not os.path.exists(gcc):
     gcc = '/usr/bin/gcc'
-  opt = f'-O3 -Wall -mtune=native -march=native -o {output}'
+  opt = f'-O3 -mtune=native -march=native -o {output}'
   debugstr = f'-pg -g -fprofile-arcs -ftest-coverage'
   if debug:
     issues.execute([f'{gcc} {opt} {debugstr} {filename} -lm'])

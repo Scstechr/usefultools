@@ -111,7 +111,7 @@ def main(init, detail, log, commit, remote, push, gitpath, filepath, branch, sav
         issues.execute([f'git diff --stat'])
         if detail:
             issues.execute([f'git add .',\
-                            f'git diff --cached --ignore-all-space --ignore-blank-lines',\
+                            f'git diff --word-diff-regex --cached --ignore-all-space --ignore-blank-lines',\
                             f'git reset'])
         if commit:
             issues.execute([f'git add {filepath}'])
