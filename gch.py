@@ -136,7 +136,7 @@ def main(init, detail, log, commit, remote, push, gitpath, filepath, branch, sav
     elif not isExist(f'git remote -v'):
         click.echo('** no remote repository **')
     else:
-        issues.execute([f'git fetch {remote}',f'git push -u {remote} {branch}'])
+        issues.execute([f'git push -u {remote} {branch}'])
 
 if __name__ == "__main__":
     main()
